@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { DocumentEditor } from "@/components/proposals/document-editor";
 import { DocumentTabs } from "@/components/proposals/document-tabs";
 import { ExportButton } from "@/components/proposals/export-button";
-import { PartialRegenerateMenu } from "@/components/proposals/partial-regenerate-menu";
 import { ScopePanel } from "@/components/proposals/scope-panel";
 import { generateStaticDocumentDrafts } from "@/lib/ai/generate-documents";
 import { getScopeRiskTags } from "@/lib/proposals/risk-tags";
@@ -19,55 +18,9 @@ type DocumentState = {
   quote: string;
 };
 
-const SECTION_PATTERNS: Record<Tab, Record<string, RegExp>> = {
-  proposal: {
-    deliverables: /\*\*In Scope:\*\*\n([\s\S]*?)(?=\n\*\*)/g,
-    timeline: /Estimated duration:[^\n]*/g,
-    pricing: /(\*\*Budget:\*\*[^\n]*|\*\*Payment Notes:\*\*[^\n]*)/g,
-    assumptions_exclusions: /(\*\*Assumptions:\*\*\n([\s\S]*?)(?=\n\n\*\*Exclusions)|\*\*Exclusions:\*\*\n([\s\S]*?)(?=\n\n##))/g,
-  },
-  sow: {
-    deliverables: /\*\*In Scope:\*\*\n([\s\S]*?)(?=\n\*\*Phase)/g,
-    timeline: /\*\*Overall Timeline:\*\*[^\n]*/g,
-    pricing: /(\*\*Payment:\*\*[^\n]*|\*\*Explicitly Excluded:\*\*\n([\s\S]*?)(?=\nAdditionally))/g,
-    assumptions_exclusions: /(\*\*Out of Scope\*\*\n([\s\S]*?)(?=\n\n## Deliverables)|\*\*Assumptions:\*\*\n([\s\S]*?)(?=\n\n\*\*Client Dependencies))/g,
-  },
-  quote: {
-    deliverables: /\*\*Best for[^\n]*/g,
-    timeline: /\*\*Payment Schedule:\*\*[^\n]*/g,
-    pricing: /(\$\d[\d,]*[^\n]*|\*\*[^*]+\*\*\s*\$[\d,]+[^\n]*)/g,
-    assumptions_exclusions: /features:\n([\s\S]*?)(?=\n\n\*\*Payment)/g,
-  },
-};
-
-const SECTION_LABELS: Record<string, string> = {
-  deliverables: "Deliverables",
-  timeline: "Timeline",
-  pricing: "Pricing",
-  assumptions_exclusions: "Assumptions / Exclusions",
-};
-
-function regenerateDocument(current: string, tab: Tab, section: string) {
-  const pattern = SECTION_PATTERNS[tab]?.[section];
-  if (pattern) {
-    const label = SECTION_LABELS[section] ?? section;
-    const replacement =
-      tab === "sow" && section === "pricing"
-        ? "Excluded: [Updated — regenerate to refine]"
-        : tab === "quote" && section === "pricing"
-          ? "Pricing model: [Updated — regenerate to refine]\nDetails: [Updated — regenerate to refine]"
-          : `${label}: [Updated — regenerate to refine]`;
-
-    return current.replace(pattern, replacement);
-  }
-
-  return `${current}\n\n[Regenerated ${section}]`;
-}
-
 export function ProposalWorkspaceClient({ proposalId, scope, template, clientName }: { proposalId: string; scope: StructuredScope; template?: Template; clientName?: string }) {
   const drafts = useMemo(() => generateStaticDocumentDrafts(scope, template, clientName), [scope, template, clientName]);
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
-  const hasAi = !scope.extractionNotes?.includes("without AI");
   const [active, setActive] = useState<Tab>("proposal");
   const [documents, setDocuments] = useState<DocumentState>({
     proposal: drafts.proposal.body,
@@ -96,16 +49,6 @@ export function ProposalWorkspaceClient({ proposalId, scope, template, clientNam
         </div>
 
         <div className="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-950/40 p-4">
-          {hasAi && (
-            <PartialRegenerateMenu
-              onSelect={(section) => {
-                setDocuments((current) => ({
-                  ...current,
-                  [active]: regenerateDocument(current[active], active, section),
-                }));
-              }}
-            />
-          )}
           <DocumentEditor content={documents[active]} onChange={(value) => setDocuments((current) => ({ ...current, [active]: value }))} />
         </div>
       </section>
