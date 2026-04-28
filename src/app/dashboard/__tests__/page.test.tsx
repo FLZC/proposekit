@@ -2,13 +2,24 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 const listProposalProjects = vi.fn();
+const getCurrentUser = vi.fn();
 
 vi.mock("@/lib/data/proposal-projects", () => ({
   listProposalProjects,
 }));
 
+vi.mock("@/lib/supabase/server", () => ({
+  getCurrentUser,
+  getSupabaseServerClient: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(),
+}));
+
 describe("DashboardPage", () => {
   it("renders returned proposal cards", async () => {
+    getCurrentUser.mockResolvedValue({ id: "test-user-id" });
     listProposalProjects.mockResolvedValue([
       {
         id: "demo-proposal",
@@ -19,12 +30,9 @@ describe("DashboardPage", () => {
       },
     ]);
 
-    process.env.NEXT_PUBLIC_DEMO_USER_ID = "00000000-0000-0000-0000-000000000001";
-
     const { default: DashboardPage } = await import("@/app/dashboard/page");
     render(await DashboardPage());
 
-    expect(listProposalProjects).toHaveBeenCalledWith(process.env.NEXT_PUBLIC_DEMO_USER_ID);
     expect(screen.getByText("Proposal dashboard")).toBeInTheDocument();
     expect(screen.getByText("Acme Studio")).toBeInTheDocument();
   });

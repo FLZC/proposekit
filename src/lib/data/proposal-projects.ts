@@ -76,6 +76,10 @@ export type ProposalProjectSummary = {
   updated_at?: string;
 };
 
+function generateId() {
+  return `proj_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
 export async function createProposalProject(input: {
   userId: string;
   clientName: string;
@@ -85,8 +89,9 @@ export async function createProposalProject(input: {
   structuredScope: StructuredScope;
 }): Promise<ProposalProject> {
   if (!hasSupabaseConfig()) {
+    const id = generateId();
     const project = buildDemoProject({
-      id: "demo-proposal",
+      id,
       user_id: input.userId,
       client_name: input.clientName,
       project_type: input.projectType,
@@ -96,7 +101,7 @@ export async function createProposalProject(input: {
       updated_at: new Date().toISOString(),
     });
 
-    demoProjects.set(project.id, project);
+    demoProjects.set(id, project);
     return project;
   }
 
@@ -117,7 +122,6 @@ export async function createProposalProject(input: {
   if (error) throw error;
   return mapRowToProject(data);
 }
-
 export async function getProposalProjectById(id: string): Promise<ProposalProject | null> {
   if (!hasSupabaseConfig()) {
     return getDemoProject(id) ?? null;

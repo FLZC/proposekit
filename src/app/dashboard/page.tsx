@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { listProposalProjects } from "@/lib/data/proposal-projects";
+import { getCurrentUser } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const projects = await listProposalProjects(process.env.NEXT_PUBLIC_DEMO_USER_ID!);
+  const user = await getCurrentUser();
+  if (!user) redirect("/auth/login");
+
+  const projects = await listProposalProjects(user.id);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-6 py-12">

@@ -2,8 +2,12 @@ import { redirect } from "next/navigation";
 import { BriefIntakeForm } from "@/components/proposals/brief-intake-form";
 import { extractStructuredScope } from "@/lib/ai/extract-structured-scope";
 import { createProposalProject } from "@/lib/data/proposal-projects";
+import { getCurrentUser } from "@/lib/supabase/server";
 
-export default function NewProposalPage() {
+export default async function NewProposalPage() {
+  const user = await getCurrentUser();
+  const userId = user?.id ?? process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "demo-user";
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-12">
       <section className="space-y-3">
@@ -19,7 +23,7 @@ export default function NewProposalPage() {
           "use server";
           const scope = await extractStructuredScope(payload);
           const project = await createProposalProject({
-            userId: process.env.NEXT_PUBLIC_DEMO_USER_ID!,
+            userId,
             clientName: payload.clientName,
             projectType: payload.projectType,
             serviceCategory: payload.templateId,
