@@ -1,0 +1,117 @@
+import { normalizeStructuredScope } from "@/lib/proposals/scope-schema";
+import type { StructuredScope } from "@/lib/proposals/types";
+import { jsonOnlyInstruction } from "./prompts";
+
+const ZHIPU_MODEL = "glm-4-flash";
+const ZHIPU_BASE = "https://open.bigmodel.cn/api/paas/v4";
+
+export function buildExtractScopePrompt(input: {
+  projectType: string;
+  rawBrief: string;
+  optionalBudget?: string;
+  optionalTargetTimeline?: string;
+}) {
+  return [
+    "You are extracting proposal scope for a small agency.",
+    jsonOnlyInstruction("StructuredScope"),
+    "Fields: deliverables, assumptions, exclusions, timeline, milestones, pricingModel, pricingNotes.",
+    `Project type: ${input.projectType}`,
+    `Budget: ${input.optionalBudget ?? "unknown"}`,
+    `Target timeline: ${input.optionalTargetTimeline ?? "unknown"}`,
+    `Raw brief: ${input.rawBrief}`,
+  ].join("\n");
+}
+
+export function normalizeExtractedScope(input: Partial<StructuredScope>) {
+  return normalizeStructuredScope(input);
+}
+
+function isBudgetLine(s: string) {
+  return /\b(budget|cost|price|fee|rate|charge)\b/i.test(s) || /\$\d/.test(s);
+}
+
+function isTimelineLine(s: string) {
+  return /\b(timeline|deadline|weeks?|months?|days?|TAT)\b/i.test(s);
+}
+
+function fallbackScopeFromInput(input: {
+  projectType: string;
+  rawBrief: string;
+  optionalBudget?: string;
+  optionalTargetTimeline?: string;
+}): StructuredScope {
+  const sentences = input.rawBrief
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const deliverables = sentences.filter((s) => !isBudgetLine(s) && !isTimelineLine(s));
+  const budgetLine = input.optionalBudget || sentences.find(isBudgetLine)?.replace(/^budget:?\s*/i, "") || "";
+  const timelineLine = input.optionalTargetTimeline || sentences.find(isTimelineLine)?.replace(/^timeline:?\s*/i, "") || "";
+
+  return normalizeStructuredScope({
+    deliverables:
+      deliverables.length > 0
+        ? deliverables.slice(0, 5).map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+        : [`${input.projectType}`],
+    assumptions: ["Client provides necessary materials and feedback"],
+    exclusions: [],
+    timeline: timelineLine,
+    milestones: [],
+    pricingModel: "",
+    pricingNotes: budgetLine,
+    optionalBudget: budgetLine,
+    optionalTargetTimeline: timelineLine,
+    extractionNotes: "Generated without AI (no API key configured)",
+  });
+}
+
+function hasApiKey() {
+  return Boolean(process.env.ZHIPU_API_KEY);
+}
+
+export async function extractStructuredScope(input: {
+  projectType: string;
+  rawBrief: string;
+  optionalBudget?: string;
+  optionalTargetTimeline?: string;
+}): Promise<StructuredScope> {
+  const apiKey = process.env.ZHIPU_API_KEY;
+  if (!apiKey) {
+    return fallbackScopeFromInput(input);
+  }
+
+  try {
+    const prompt = buildExtractScopePrompt(input);
+    const response = await fetch(`${ZHIPU_BASE}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: ZHIPU_MODEL,
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 1200,
+        temperature: 0.3,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Zhipu API error ${response.status}: ${errorText}`);
+      return fallbackScopeFromInput(input);
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content ?? "";
+
+    // Zhipu may wrap JSON in markdown fences
+    const json = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+
+    return normalizeExtractedScope(JSON.parse(json));
+  } catch (error) {
+    console.error("Zhipu extraction failed:", error);
+    return fallbackScopeFromInput(input);
+  }
+}

@@ -3,12 +3,21 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Current state
-- This repo is in planning/spec stage, not implementation stage.
-- Current docs:
+- This repo now has an initial ProposalCraft MVP scaffold.
+- Key docs:
   - `APP_IDEAS.md`
   - `docs/superpowers/specs/2026-04-23-proposalcraft-design.md`
-- There is no app source tree or confirmed build/lint/test/dev command yet.
-- Do not invent commands; add them only after the real toolchain exists.
+  - `docs/superpowers/plans/2026-04-23-proposalcraft-mvp.md`
+- Product remains a Web SaaS for proposal generation workflows.
+
+## Commands
+- `npm install` — install dependencies
+- `npm run dev` — start local development server
+- `npm run build` — production build
+- `npm run lint` — lint the codebase
+- `npm run typecheck` — run TypeScript checks
+- `npm run test` — run the Vitest suite
+- `npx vitest run src/lib/proposals/__tests__/scope-schema.test.ts` — run a single test file
 
 ## Product focus
 - Planned product: **ProposalCraft**
@@ -59,10 +68,3 @@ Do not let proposal/SOW/quote evolve as independent conflicting documents.
 - Use rule-based normalization/validation for stability
 - Scope risk indicators should be non-blocking warnings
 - Partial regeneration should target specific sections only
-
-## Update this file when implementation starts
-Add real commands and architecture details once the repo has:
-- app scaffold
-- chosen framework/toolchain
-- runnable dev/build/test/lint commands
-- stable source tree
