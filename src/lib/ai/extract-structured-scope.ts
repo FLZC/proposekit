@@ -11,14 +11,31 @@ export function buildExtractScopePrompt(input: {
   optionalBudget?: string;
   optionalTargetTimeline?: string;
 }) {
+  const context = [
+    input.optionalBudget && `Budget from form: ${input.optionalBudget}`,
+    input.optionalTargetTimeline && `Timeline from form: ${input.optionalTargetTimeline}`,
+  ].filter(Boolean).join(". ");
+
   return [
-    "You are extracting proposal scope for a small agency.",
+    "You are extracting proposal scope for a small web/design agency from a client brief.",
     jsonOnlyInstruction("StructuredScope"),
-    "Fields: deliverables, assumptions, exclusions, timeline, milestones, pricingModel, pricingNotes.",
+    "",
+    "Return this JSON shape:",
+    '{',
+    '  "deliverables": ["string array — each item is one concrete deliverable"],',
+    '  "assumptions": ["string array — what the project assumes client will provide or do"],',
+    '  "exclusions": ["string array — what is explicitly NOT included"],',
+    '  "timeline": "string — overall project duration, e.g. \'8 weeks\' or \'3 months\'",',
+    '  "milestones": ["string array — key project phases or checkpoints"],',
+    '  "pricingModel": "one of: fixed_price, milestone, three_tier, or empty string if unclear",',
+    '  "pricingNotes": "string — budget amount, payment terms, or pricing details from brief"',
+    '}',
+    "",
     `Project type: ${input.projectType}`,
-    `Budget: ${input.optionalBudget ?? "unknown"}`,
-    `Target timeline: ${input.optionalTargetTimeline ?? "unknown"}`,
+    context ? `Additional context: ${context}` : "",
     `Raw brief: ${input.rawBrief}`,
+    "",
+    "IMPORTANT: Always extract a timeline string if mentioned. Always put dollar amounts in pricingNotes. Do not skip fields — use empty string for truly missing info.",
   ].join("\n");
 }
 
@@ -109,7 +126,9 @@ export async function extractStructuredScope(input: {
     // Zhipu may wrap JSON in markdown fences
     const json = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
 
-    return normalizeExtractedScope(JSON.parse(json));
+    const scope = normalizeExtractedScope(JSON.parse(json));
+    scope.extractionNotes = "AI extracted";
+    return scope;
   } catch (error) {
     console.error("Zhipu extraction failed:", error);
     return fallbackScopeFromInput(input);
