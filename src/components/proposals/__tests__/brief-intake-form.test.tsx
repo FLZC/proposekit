@@ -36,6 +36,7 @@ describe("BriefIntakeForm", () => {
         clientName: "Acme Studio",
         projectType: "Website redesign",
         serviceCategory: "Web design",
+        templateId: "website_development",
         rawBrief: "Need a 5-page marketing site with CMS support.",
         optionalBudget: "$8k-$12k",
         optionalTargetTimeline: "4 weeks",

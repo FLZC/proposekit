@@ -2,11 +2,20 @@
 
 import { useState, useTransition } from "react";
 
+const TEMPLATES = [
+  { value: "web_design", label: "Web Design" },
+  { value: "website_development", label: "Website Development" },
+  { value: "landing_page", label: "Landing Page" },
+  { value: "branding_package", label: "Branding Package" },
+  { value: "monthly_retainer", label: "Monthly Retainer" },
+];
+
 type Props = {
   onSubmit: (payload: {
     clientName: string;
     projectType: string;
     serviceCategory: string;
+    templateId: string;
     rawBrief: string;
     optionalBudget: string;
     optionalTargetTimeline: string;
@@ -18,6 +27,7 @@ export function BriefIntakeForm({ onSubmit }: Props) {
     clientName: "",
     projectType: "website redesign",
     serviceCategory: "web design",
+    templateId: "website_development",
     rawBrief: "",
     optionalBudget: "",
     optionalTargetTimeline: "",
@@ -72,6 +82,20 @@ export function BriefIntakeForm({ onSubmit }: Props) {
             onChange={(event) => setForm({ ...form, serviceCategory: event.target.value })}
           />
         </div>
+      </div>
+
+      <div className="grid gap-2">
+        <label className="text-sm font-medium text-slate-100" htmlFor="templateId">Template</label>
+        <select
+          id="templateId"
+          className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+          value={form.templateId}
+          onChange={(event) => setForm({ ...form, templateId: event.target.value })}
+        >
+          {TEMPLATES.map((t) => (
+            <option key={t.value} value={t.value}>{t.label}</option>
+          ))}
+        </select>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">

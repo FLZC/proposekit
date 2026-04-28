@@ -20,6 +20,10 @@ function fuzzyMatch(input: string, candidates: string[]): string | undefined {
 const CATEGORIES = ["web design", "web development", "landing page", "branding", "monthly retainer"];
 
 export function pickTemplate(projectType?: string, serviceCategory?: string): Template | undefined {
+  // Direct template ID match (from template selector)
+  const directMatch = getTemplate(serviceCategory ?? "") ?? getTemplate(projectType ?? "");
+  if (directMatch) return directMatch;
+
   const match = fuzzyMatch(serviceCategory ?? "", CATEGORIES) ?? fuzzyMatch(projectType ?? "", CATEGORIES);
 
   if (match) return getTemplateByCategory(match);

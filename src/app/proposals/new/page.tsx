@@ -22,7 +22,7 @@ export default function NewProposalPage() {
             userId: process.env.NEXT_PUBLIC_DEMO_USER_ID!,
             clientName: payload.clientName,
             projectType: payload.projectType,
-            serviceCategory: payload.serviceCategory,
+            serviceCategory: payload.templateId,
             rawBrief: payload.rawBrief,
             structuredScope: {
               ...scope,
