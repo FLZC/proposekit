@@ -10,7 +10,7 @@ export default async function ExportPreviewPage({ params }: { params: Promise<{ 
     throw new Error(`Proposal project not found: ${id}`);
   }
 
-  const drafts = generateStaticDocumentDrafts(project.structured_scope);
+  const drafts = generateStaticDocumentDrafts(project.structured_scope, undefined, project.client_name, project.project_type);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-12">

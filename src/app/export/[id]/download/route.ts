@@ -12,7 +12,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     return new NextResponse("Not found", { status: 404 });
   }
 
-  const drafts = generateStaticDocumentDrafts(project.structured_scope);
+  const drafts = generateStaticDocumentDrafts(project.structured_scope, undefined, project.client_name, project.project_type);
   const buffer = await renderToBuffer(
     React.createElement(
       Document,

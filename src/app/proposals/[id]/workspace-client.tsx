@@ -64,8 +64,8 @@ function regenerateDocument(current: string, tab: Tab, section: string) {
   return `${current}\n\n[Regenerated ${section}]`;
 }
 
-export function ProposalWorkspaceClient({ proposalId, scope, template }: { proposalId: string; scope: StructuredScope; template?: Template }) {
-  const drafts = useMemo(() => generateStaticDocumentDrafts(scope, template), [scope, template]);
+export function ProposalWorkspaceClient({ proposalId, scope, template, clientName }: { proposalId: string; scope: StructuredScope; template?: Template; clientName?: string }) {
+  const drafts = useMemo(() => generateStaticDocumentDrafts(scope, template, clientName), [scope, template, clientName]);
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
   const hasAi = !scope.extractionNotes?.includes("without AI");
   const [active, setActive] = useState<Tab>("proposal");

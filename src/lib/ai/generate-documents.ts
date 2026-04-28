@@ -20,10 +20,12 @@ export function pickTemplate(projectType?: string, serviceCategory?: string): Te
 export function generateStaticDocumentDrafts(
   scope: StructuredScope,
   template?: Template,
+  clientName = "Client",
+  projectType = "Website Project",
 ) {
   return renderDocuments(template ?? getTemplate("website_development")!, {
-    clientName: "Client",
-    projectType: "Website Project",
+    clientName,
+    projectType,
     scope,
   });
 }
