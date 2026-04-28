@@ -30,7 +30,13 @@ function normalizeOptionalString(value: unknown) {
 }
 
 function normalizePricingModel(value: unknown): StructuredScope["pricingModel"] {
-  return value === "fixed_price" || value === "milestone" || value === "three_tier" || value === "" ? value : "";
+  if (typeof value !== "string") return "";
+  const normalized = value.trim().toLowerCase().replace(/[\s-]+/g, "_");
+  if (normalized === "fixed_price" || normalized === "milestone" || normalized === "three_tier") return normalized;
+  if (normalized.includes("fixed") || normalized.includes("flat")) return "fixed_price";
+  if (normalized.includes("milestone") || normalized.includes("phase")) return "milestone";
+  if (normalized.includes("tier") || normalized.includes("three")) return "three_tier";
+  return "";
 }
 
 export function normalizeStructuredScope(input: Partial<StructuredScope>): StructuredScope {
