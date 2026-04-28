@@ -3,15 +3,22 @@ import { RiskTagList } from "./risk-tag-list";
 
 export function ScopePanel({ scope, riskTags }: { scope: StructuredScope; riskTags: string[] }) {
   const isFallback = scope.extractionNotes?.includes("without AI");
+  const showBadge = scope.extractionNotes != null;
+  const badgeLabel = isFallback ? "No AI available" : "AI extracted";
+  const badgeStyle = isFallback
+    ? "bg-amber-400/15 text-amber-300"
+    : "bg-emerald-400/15 text-emerald-300";
 
   return (
     <aside className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-slate-950/20">
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-amber-300">Structured scope</p>
-          <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${isFallback ? "bg-amber-400/15 text-amber-300" : "bg-emerald-400/15 text-emerald-300"}`}>
-            {isFallback ? "No AI available" : "AI extracted"}
-          </span>
+          {showBadge && (
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${badgeStyle}`}>
+              {badgeLabel}
+            </span>
+          )}
         </div>
         {isFallback && (
           <p className="text-xs leading-relaxed text-amber-300/70">
