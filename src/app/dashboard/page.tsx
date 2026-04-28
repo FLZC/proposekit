@@ -47,7 +47,7 @@ export default async function DashboardPage() {
                     <span className="inline-flex w-fit rounded-full bg-slate-800 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-300">
                       {project.status}
                     </span>
-                    <span>Updated {new Date(project.updated_at).toLocaleDateString()}</span>
+                    <span>Updated {project.updated_at ? new Date(project.updated_at).toLocaleDateString() : "Recently"}</span>
                   </div>
                 </div>
               </Link>

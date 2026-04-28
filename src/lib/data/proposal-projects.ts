@@ -54,6 +54,28 @@ function getDemoProject(id: string) {
   return null;
 }
 
+function mapRowToProject(row: Record<string, unknown>): ProposalProject {
+  return {
+    id: row.id as string,
+    user_id: row.user_id as string | undefined,
+    client_name: row.client_name as string,
+    project_type: row.project_type as string | undefined,
+    service_category: row.service_category as string | undefined,
+    raw_brief: row.raw_brief as string | undefined,
+    structured_scope: (row.structured_scope ?? {}) as StructuredScope,
+    status: row.status as string | undefined,
+    updated_at: row.updated_at as string | undefined,
+  };
+}
+
+export type ProposalProjectSummary = {
+  id: string;
+  client_name: string;
+  project_type?: string;
+  status?: string;
+  updated_at?: string;
+};
+
 export async function createProposalProject(input: {
   userId: string;
   clientName: string;
@@ -61,7 +83,7 @@ export async function createProposalProject(input: {
   serviceCategory: string;
   rawBrief: string;
   structuredScope: StructuredScope;
-}) {
+}): Promise<ProposalProject> {
   if (!hasSupabaseConfig()) {
     const project = buildDemoProject({
       id: "demo-proposal",
@@ -93,22 +115,23 @@ export async function createProposalProject(input: {
     .single();
 
   if (error) throw error;
-  return data;
+  return mapRowToProject(data);
 }
 
-export async function getProposalProjectById(id: string) {
+export async function getProposalProjectById(id: string): Promise<ProposalProject | null> {
   if (!hasSupabaseConfig()) {
-    return getDemoProject(id);
+    return getDemoProject(id) ?? null;
   }
 
   const supabase = await getSupabaseServerClient();
   const { data, error } = await supabase.from("proposal_projects").select("*").eq("id", id).maybeSingle();
 
   if (error) throw error;
-  return data;
+  if (!data) return null;
+  return mapRowToProject(data);
 }
 
-export async function listProposalProjects(userId: string) {
+export async function listProposalProjects(userId: string): Promise<ProposalProjectSummary[]> {
   if (!hasSupabaseConfig()) {
     const projects = Array.from(demoProjects.values());
     if (projects.length === 0) {
@@ -144,5 +167,5 @@ export async function listProposalProjects(userId: string) {
     .order("updated_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return (data ?? []) as ProposalProjectSummary[];
 }
