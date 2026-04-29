@@ -13,6 +13,7 @@ vi.mock("@react-pdf/renderer", () => ({
   Text: "Text",
   View: "View",
   renderToBuffer,
+  StyleSheet: { create: (s: Record<string, unknown>) => s },
 }));
 
 describe("export download route", () => {
