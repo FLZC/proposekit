@@ -40,6 +40,6 @@ describe("export download route", () => {
     expect(getProposalProjectById).toHaveBeenCalledWith("project-123");
     expect(renderToBuffer).toHaveBeenCalled();
     expect(response.headers.get("Content-Type")).toBe("application/pdf");
-    expect(response.headers.get("Content-Disposition")).toBe('attachment; filename="proposal-project-123.pdf"');
+    expect(response.headers.get("Content-Disposition")).toBe('attachment; filename="proposal-Northwind-Studio.pdf"');
   });
 });

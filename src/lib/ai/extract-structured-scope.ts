@@ -35,7 +35,11 @@ export function buildExtractScopePrompt(input: {
     context ? `Additional context: ${context}` : "",
     `Raw brief: ${input.rawBrief}`,
     "",
-    "IMPORTANT: Always extract a timeline string if mentioned. Always put dollar amounts in pricingNotes. Do not skip fields — use empty string for truly missing info.",
+    "CRITICAL RULES:",
+    "— timeline: always include units, e.g. '6 weeks' not '6'",
+    "— pricingNotes: always include full original text with $ and numbers, e.g. '$10,000; 50% upfront, 50% on launch' not '10'",
+    "— optionalBudget: same as pricingNotes — keep the $ sign and full amount",
+    "— Do not skip fields — use empty string only for truly missing info.",
   ].join("\n");
 }
 
