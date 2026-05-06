@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Document, Page, Text, View, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
-import { generatePolishedDocuments } from "@/lib/ai/generate-documents";
+import { generateStaticDocumentDrafts } from "@/lib/ai/generate-documents";
 import { getProposalProjectById } from "@/lib/data/proposal-projects";
 
 const A = "#f59e0b"; // amber brand accent
@@ -186,7 +186,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const project = await getProposalProjectById(id);
   if (!project) return new NextResponse("Not found", { status: 404 });
 
-  const drafts = await generatePolishedDocuments(project.structured_scope, undefined, project.client_name, project.project_type);
+  const drafts = generateStaticDocumentDrafts(project.structured_scope, undefined, project.client_name, project.project_type);
   const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const filename = (project.client_name ?? "project").replace(/[^a-zA-Z0-9]/g, "-");
   const client = project.client_name ?? "Client";

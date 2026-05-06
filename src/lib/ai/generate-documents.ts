@@ -20,7 +20,6 @@ function fuzzyMatch(input: string, candidates: string[]): string | undefined {
 const CATEGORIES = ["web design", "web development", "landing page", "branding", "monthly retainer"];
 
 export function pickTemplate(projectType?: string, serviceCategory?: string): Template | undefined {
-  // Direct template ID match (from template selector)
   const directMatch = getTemplate(serviceCategory ?? "") ?? getTemplate(projectType ?? "");
   if (directMatch) return directMatch;
 
@@ -103,15 +102,12 @@ export async function generatePolishedDocuments(
   const drafts = generateStaticDocumentDrafts(scope, template, clientName, projectType);
   if (!process.env.ZHIPU_API_KEY) return drafts;
 
-  // Polish proposal and SOW in parallel (quote stays as-is for number accuracy)
-  const [proposal, sow] = await Promise.all([
-    polishDocument(drafts.proposal.body),
-    polishDocument(drafts.sow.body),
-  ]);
+  // Only polish proposal — SOW needs precision, quote needs exact numbers
+  const proposal = await polishDocument(drafts.proposal.body);
 
   return {
     proposal: { title: drafts.proposal.title, body: proposal },
-    sow: { title: drafts.sow.title, body: sow },
+    sow: drafts.sow,
     quote: drafts.quote,
   };
 }
