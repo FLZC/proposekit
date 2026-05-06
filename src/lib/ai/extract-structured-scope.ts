@@ -10,6 +10,7 @@ export function buildExtractScopePrompt(input: {
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
+  templateId?: string;
 }) {
   const context = [
     input.optionalBudget && `Budget from form: ${input.optionalBudget}`,
@@ -32,6 +33,17 @@ export function buildExtractScopePrompt(input: {
     '}',
     "",
     `Project type: ${input.projectType ?? "web/design project"}`,
+    `Template: ${input.templateId ?? "not specified"}`,
+    "",
+    input.templateId === "web_design"
+      ? "NOTE: This is a web DESIGN project — deliverables are design files (Figma, mockups, prototypes), not code."
+      : input.templateId === "branding_package"
+      ? "NOTE: This is a BRANDING project — deliverables are logo, color palette, typography, brand guidelines, not a website."
+      : input.templateId === "landing_page"
+      ? "NOTE: This is a LANDING PAGE project — single-page, conversion-focused. Not a full website."
+      : input.templateId === "monthly_retainer"
+      ? "NOTE: This is a MONTHLY RETAINER. Extract recurring monthly services, hours per month, SLA terms. pricingModel='fixed_price', pricingNotes='$X/mo for Y hours'."
+      : "",
     context ? `Additional context: ${context}` : "",
     `Raw brief: ${input.rawBrief}`,
     "",
@@ -60,6 +72,7 @@ function fallbackScopeFromInput(input: {
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
+  templateId?: string;
 }): StructuredScope {
   const sentences = input.rawBrief
     .split(/[.!?]+/)
@@ -96,6 +109,7 @@ export async function extractStructuredScope(input: {
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
+  templateId?: string;
 }): Promise<StructuredScope> {
   const apiKey = process.env.ZHIPU_API_KEY;
   if (!apiKey) {

@@ -21,7 +21,12 @@ export default async function NewProposalPage() {
       <BriefIntakeForm
         onSubmit={async (payload) => {
           "use server";
-          const scope = await extractStructuredScope(payload);
+          const scope = await extractStructuredScope({
+            rawBrief: payload.rawBrief,
+            optionalBudget: payload.optionalBudget,
+            optionalTargetTimeline: payload.optionalTargetTimeline,
+            templateId: payload.templateId,
+          });
           const project = await createProposalProject({
             userId,
             clientName: payload.clientName,
