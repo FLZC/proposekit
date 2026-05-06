@@ -36,22 +36,22 @@ export function buildExtractScopePrompt(input: {
     `Template: ${input.templateId ?? "not specified"}`,
     "",
     input.templateId === "web_design"
-      ? "NOTE: This is a web DESIGN project — deliverables are design files (Figma, mockups, prototypes), not code."
+      ? "NOTE: This is a web DESIGN project. Deliverables should be design files (e.g. Figma mockups, wireframes, prototypes, style guides), not code. Do not mention development or coding."
       : input.templateId === "branding_package"
-      ? "NOTE: This is a BRANDING project — deliverables are logo, color palette, typography, brand guidelines, not a website."
+      ? "NOTE: This is a BRANDING project. Deliverables should be brand assets (e.g. logo, color palette, typography, brand guidelines), not a website. Do not mention web pages or code."
       : input.templateId === "landing_page"
-      ? "NOTE: This is a LANDING PAGE project — single-page, conversion-focused. Not a full website."
+      ? "NOTE: This is a LANDING PAGE project — single page, conversion-focused. Not a full multi-page website. Deliverables might include copy, CRO, design comps."
       : input.templateId === "monthly_retainer"
-      ? "NOTE: This is a MONTHLY RETAINER. Extract recurring monthly services, hours per month, SLA terms. pricingModel='fixed_price', pricingNotes='$X/mo for Y hours'."
+      ? "NOTE: This is a MONTHLY RETAINER. The client is paying a recurring fee for ongoing services. Deliverables are recurring (e.g. monthly maintenance, support hours, content updates). pricingModel should be 'fixed_price'. pricingNotes should describe the monthly fee (use actual numbers from the brief, e.g. '$500/mo for 5 hours' or '$1,200/mo unlimited support'). Do NOT output placeholder text like $X or Y hours."
       : "",
     context ? `Additional context: ${context}` : "",
     `Raw brief: ${input.rawBrief}`,
     "",
     "CRITICAL RULES:",
-    "— timeline: always include units, e.g. '6 weeks' not '6'",
-    "— pricingNotes: always include full original text with $ and numbers, e.g. '$10,000; 50% upfront, 50% on launch' not '10'",
-    "— optionalBudget: same as pricingNotes — keep the $ sign and full amount",
-    "— Do not skip fields — use empty string only for truly missing info.",
+    "— timeline: always include units, e.g. '6 weeks' not '6'. If not mentioned, leave empty.",
+    "— pricingNotes: include full original text with $ and numbers, e.g. '$10,000; 50% upfront, 50% on launch'. If budget is not mentioned, leave empty.",
+    "— NEVER output placeholder text like '$X/mo', 'Y hours', 'TBD', or 'unknown'. If a field is not mentioned in the brief, use empty string or empty array.",
+    "— Only extract what is explicitly stated in the brief. Do not invent deliverables, assumptions, or exclusions.",
   ].join("\n");
 }
 
