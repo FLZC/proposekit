@@ -39,6 +39,23 @@ function normalizePricingModel(value: unknown): StructuredScope["pricingModel"] 
   return "";
 }
 
+function normalizeBudget(value: unknown): string {
+  if (typeof value !== "string") return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  // Already has $ or currency context — keep as-is
+  if (/\$/.test(trimmed)) return trimmed;
+  // Bare number like "12000" or "12" → add $ and comma
+  if (/^\d+$/.test(trimmed)) {
+    const num = parseInt(trimmed, 10);
+    return `$${num.toLocaleString("en-US")}`;
+  }
+  // Number with k/m suffix like "12k" or "5m"
+  const km = trimmed.match(/^(\d+)\s*[kK]$/);
+  if (km) return `$${km[1]},000`;
+  return trimmed;
+}
+
 export function normalizeStructuredScope(input: Partial<StructuredScope>): StructuredScope {
   return scopeSchema.parse({
     ...input,
@@ -48,8 +65,8 @@ export function normalizeStructuredScope(input: Partial<StructuredScope>): Struc
     milestones: normalizeStringList(input.milestones),
     timeline: normalizeString(input.timeline),
     pricingModel: normalizePricingModel(input.pricingModel),
-    pricingNotes: normalizeString(input.pricingNotes),
-    optionalBudget: normalizeOptionalString(input.optionalBudget),
+    pricingNotes: normalizeBudget(input.pricingNotes),
+    optionalBudget: normalizeBudget(input.optionalBudget) ? normalizeBudget(input.optionalBudget) : undefined,
     optionalTargetTimeline: normalizeOptionalString(input.optionalTargetTimeline),
     extractionNotes: normalizeOptionalString(input.extractionNotes),
   });

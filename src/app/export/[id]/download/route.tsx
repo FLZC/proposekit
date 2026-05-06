@@ -33,7 +33,7 @@ const S = StyleSheet.create({
   bold: { fontFamily: "Helvetica-Bold", color: "#0f172a" },
 
   // ── Feature block (outcome / why choose me highlight) ──
-  featureBox: { backgroundColor: "#fff7ed", borderLeft: "4 solid #f59e0b", padding: 14, marginVertical: 14, borderRadius: 4 },
+  featureBox: { backgroundColor: "#fff7ed", borderLeft: "4 solid #f59e0b", padding: 14, marginVertical: 14, borderRadius: 4, width: "100%" },
   featureTitle: { fontSize: 12, fontFamily: "Helvetica-Bold", color: D, marginBottom: 6 },
   featureBody: { fontSize: 10, fontFamily: "Helvetica", color: T, lineHeight: 1.5 },
 
