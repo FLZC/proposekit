@@ -3,18 +3,17 @@
 import { useState, useTransition } from "react";
 
 const TEMPLATES = [
-  { value: "web_design", label: "Web Design" },
-  { value: "website_development", label: "Website Development" },
-  { value: "landing_page", label: "Landing Page" },
-  { value: "branding_package", label: "Branding Package" },
-  { value: "monthly_retainer", label: "Monthly Retainer" },
+  { value: "web_design", label: "Web Design", defaultType: "website redesign" },
+  { value: "website_development", label: "Website Development", defaultType: "website development" },
+  { value: "landing_page", label: "Landing Page", defaultType: "landing page design" },
+  { value: "branding_package", label: "Branding Package", defaultType: "brand identity design" },
+  { value: "monthly_retainer", label: "Monthly Retainer", defaultType: "ongoing website maintenance" },
 ];
 
 type Props = {
   onSubmit: (payload: {
     clientName: string;
     projectType: string;
-    serviceCategory: string;
     templateId: string;
     rawBrief: string;
     optionalBudget: string;
@@ -25,8 +24,7 @@ type Props = {
 export function BriefIntakeForm({ onSubmit }: Props) {
   const [form, setForm] = useState({
     clientName: "",
-    projectType: "website redesign",
-    serviceCategory: "web design",
+    projectType: "website development",
     templateId: "website_development",
     rawBrief: "",
     optionalBudget: "",
@@ -65,37 +63,28 @@ export function BriefIntakeForm({ onSubmit }: Props) {
           <input
             id="projectType"
             className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
-            placeholder="Website redesign"
+            placeholder="e.g. website redesign"
             value={form.projectType}
             onChange={(event) => setForm({ ...form, projectType: event.target.value })}
           />
         </div>
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-slate-100" htmlFor="serviceCategory">
-            Service category
-          </label>
-          <input
-            id="serviceCategory"
-            className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
-            placeholder="Web design"
-            value={form.serviceCategory}
-            onChange={(event) => setForm({ ...form, serviceCategory: event.target.value })}
-          />
-        </div>
-      </div>
-
-      <div className="grid gap-2">
         <label className="text-sm font-medium text-slate-100" htmlFor="templateId">Template</label>
         <select
           id="templateId"
           className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
           value={form.templateId}
-          onChange={(event) => setForm({ ...form, templateId: event.target.value })}
+          onChange={(event) => {
+            const tpl = event.target.value;
+            const template = TEMPLATES.find((t) => t.value === tpl);
+            setForm({ ...form, templateId: tpl, projectType: template?.defaultType ?? "project" });
+          }}
         >
           {TEMPLATES.map((t) => (
             <option key={t.value} value={t.value}>{t.label}</option>
           ))}
         </select>
+      </div>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">

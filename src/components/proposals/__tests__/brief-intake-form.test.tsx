@@ -15,9 +15,6 @@ describe("BriefIntakeForm", () => {
     fireEvent.change(screen.getByLabelText("Project type"), {
       target: { value: "Website redesign" },
     });
-    fireEvent.change(screen.getByLabelText("Service category"), {
-      target: { value: "Web design" },
-    });
     fireEvent.change(screen.getByLabelText("Budget"), {
       target: { value: "$8k-$12k" },
     });
@@ -35,7 +32,6 @@ describe("BriefIntakeForm", () => {
       expect(onSubmit).toHaveBeenCalledWith({
         clientName: "Acme Studio",
         projectType: "Website redesign",
-        serviceCategory: "Web design",
         templateId: "website_development",
         rawBrief: "Need a 5-page marketing site with CMS support.",
         optionalBudget: "$8k-$12k",
