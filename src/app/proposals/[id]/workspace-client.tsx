@@ -5,7 +5,6 @@ import { DocumentEditor } from "@/components/proposals/document-editor";
 import { DocumentTabs } from "@/components/proposals/document-tabs";
 import { ExportButton } from "@/components/proposals/export-button";
 import { ScopePanel } from "@/components/proposals/scope-panel";
-import { generateStaticDocumentDrafts } from "@/lib/ai/generate-documents";
 import { getScopeRiskTags } from "@/lib/proposals/risk-tags";
 import type { StructuredScope } from "@/lib/proposals/types";
 import type { Template } from "@/lib/templates/types";
@@ -18,14 +17,19 @@ type DocumentState = {
   quote: string;
 };
 
-export function ProposalWorkspaceClient({ proposalId, scope, template, clientName }: { proposalId: string; scope: StructuredScope; template?: Template; clientName?: string }) {
-  const drafts = useMemo(() => generateStaticDocumentDrafts(scope, template, clientName), [scope, template, clientName]);
+type Docs = {
+  proposal: { title: string; body: string };
+  sow: { title: string; body: string };
+  quote: { title: string; body: string };
+};
+
+export function ProposalWorkspaceClient({ proposalId, scope, template, clientName, docs }: { proposalId: string; scope: StructuredScope; template?: Template; clientName?: string; docs: Docs }) {
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
   const [active, setActive] = useState<Tab>("proposal");
   const [documents, setDocuments] = useState<DocumentState>({
-    proposal: drafts.proposal.body,
-    sow: drafts.sow.body,
-    quote: drafts.quote.body,
+    proposal: docs.proposal.body,
+    sow: docs.sow.body,
+    quote: docs.quote.body,
   });
 
   return (
