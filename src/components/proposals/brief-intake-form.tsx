@@ -50,6 +50,7 @@ export function BriefIntakeForm({ onSubmit }: Props) {
           id="clientName"
           className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
           placeholder="Acme Studio"
+          required
           value={form.clientName}
           onChange={(event) => setForm({ ...form, clientName: event.target.value })}
         />
@@ -104,6 +105,7 @@ export function BriefIntakeForm({ onSubmit }: Props) {
           id="rawBrief"
           className="min-h-48 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
           placeholder="Paste client brief, notes, or email thread"
+          required
           value={form.rawBrief}
           onChange={(event) => setForm({ ...form, rawBrief: event.target.value })}
         />
@@ -115,7 +117,7 @@ export function BriefIntakeForm({ onSubmit }: Props) {
       <button
         className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-amber-400 px-4 py-3 text-base font-medium text-slate-950 transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60 md:w-fit"
         type="submit"
-        disabled={isPending}
+        disabled={isPending || !form.clientName.trim() || !form.rawBrief.trim()}
       >
         {isPending ? "Extracting scope..." : "Extract scope"}
       </button>
