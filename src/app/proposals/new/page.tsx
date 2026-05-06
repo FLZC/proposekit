@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/lib/supabase/server";
 
 export default async function NewProposalPage() {
   const user = await getCurrentUser();
-  const userId = user?.id ?? process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "demo-user";
+  const userId = user?.id ?? process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "00000000-0000-0000-0000-000000000001";
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-12">
@@ -21,31 +21,25 @@ export default async function NewProposalPage() {
       <BriefIntakeForm
         onSubmit={async (payload) => {
           "use server";
-          try {
-            const scope = await extractStructuredScope({
-              rawBrief: payload.rawBrief,
+          const scope = await extractStructuredScope({
+            rawBrief: payload.rawBrief,
+            optionalBudget: payload.optionalBudget,
+            optionalTargetTimeline: payload.optionalTargetTimeline,
+            templateId: payload.templateId,
+          });
+          const project = await createProposalProject({
+            userId,
+            clientName: payload.clientName,
+            projectType: payload.templateId,
+            serviceCategory: payload.templateId,
+            rawBrief: payload.rawBrief,
+            structuredScope: {
+              ...scope,
               optionalBudget: payload.optionalBudget,
               optionalTargetTimeline: payload.optionalTargetTimeline,
-              templateId: payload.templateId,
-            });
-            const cleanScope = JSON.parse(JSON.stringify({
-              ...scope,
-              optionalBudget: payload.optionalBudget || scope.optionalBudget,
-              optionalTargetTimeline: payload.optionalTargetTimeline || scope.optionalTargetTimeline,
-            }));
-            const project = await createProposalProject({
-              userId,
-              clientName: payload.clientName,
-              projectType: payload.templateId,
-              serviceCategory: payload.templateId,
-              rawBrief: payload.rawBrief,
-              structuredScope: cleanScope,
-            });
-            redirect(`/proposals/${project.id}`);
-          } catch (err) {
-            console.error("Failed to create proposal:", err);
-            throw new Error("Failed to create proposal. Please try again.");
-          }
+            },
+          });
+          redirect(`/proposals/${project.id}`);
         }}
       />
       <p className="mt-4 text-xs leading-relaxed text-slate-500">

@@ -64,18 +64,18 @@ Rules:
 Return the polished text only. Do not add explanations.`;
 
 export async function polishDocument(body: string): Promise<string> {
-  const apiKey = process.env.ZHIPU_API_KEY;
+  const apiKey = process.env.DASHSCOPE_API_KEY;
   if (!apiKey) return body;
 
   try {
-    const response = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
+    const response = await fetch("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "glm-4-flash",
+        model: "qwen-turbo",
         messages: [
           { role: "system", content: POLISH_PROMPT },
           { role: "user", content: `Polish the text below:\n\n${body}` },
@@ -100,7 +100,7 @@ export async function generatePolishedDocuments(
   projectType = "Website Project",
 ) {
   const drafts = generateStaticDocumentDrafts(scope, template, clientName, projectType);
-  if (!process.env.ZHIPU_API_KEY) return drafts;
+  if (!process.env.DASHSCOPE_API_KEY) return drafts;
 
   // Only polish proposal — SOW needs precision, quote needs exact numbers
   const proposal = await polishDocument(drafts.proposal.body);

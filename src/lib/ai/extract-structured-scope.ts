@@ -2,8 +2,8 @@ import { normalizeStructuredScope } from "@/lib/proposals/scope-schema";
 import type { StructuredScope } from "@/lib/proposals/types";
 import { jsonOnlyInstruction } from "./prompts";
 
-const ZHIPU_MODEL = "glm-4-flash";
-const ZHIPU_BASE = "https://open.bigmodel.cn/api/paas/v4";
+const AI_MODEL = "qwen-turbo";
+const AI_BASE = "https://dashscope.aliyuncs.com/compatible-mode/v1";
 
 export function buildExtractScopePrompt(input: {
   projectType?: string;
@@ -101,7 +101,7 @@ function fallbackScopeFromInput(input: {
 }
 
 function hasApiKey() {
-  return Boolean(process.env.ZHIPU_API_KEY);
+  return Boolean(process.env.DASHSCOPE_API_KEY);
 }
 
 export async function extractStructuredScope(input: {
@@ -111,21 +111,21 @@ export async function extractStructuredScope(input: {
   optionalTargetTimeline?: string;
   templateId?: string;
 }): Promise<StructuredScope> {
-  const apiKey = process.env.ZHIPU_API_KEY;
+  const apiKey = process.env.DASHSCOPE_API_KEY;
   if (!apiKey) {
     return fallbackScopeFromInput(input);
   }
 
   try {
     const prompt = buildExtractScopePrompt(input);
-    const response = await fetch(`${ZHIPU_BASE}/chat/completions`, {
+    const response = await fetch(`${AI_BASE}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: ZHIPU_MODEL,
+        model: AI_MODEL,
         messages: [{ role: "user", content: prompt }],
         max_tokens: 1200,
         temperature: 0.3,
@@ -134,21 +134,20 @@ export async function extractStructuredScope(input: {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Zhipu API error ${response.status}: ${errorText}`);
+      console.error(`AI API error ${response.status}: ${errorText}`);
       return fallbackScopeFromInput(input);
     }
 
     const data = await response.json();
     const text = data.choices?.[0]?.message?.content ?? "";
 
-    // Zhipu may wrap JSON in markdown fences
     const json = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
 
     const scope = normalizeExtractedScope(JSON.parse(json));
     scope.extractionNotes = "AI extracted";
     return scope;
   } catch (error) {
-    console.error("Zhipu extraction failed:", error);
+    console.error("AI extraction failed:", error);
     return fallbackScopeFromInput(input);
   }
 }
