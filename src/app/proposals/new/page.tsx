@@ -21,25 +21,31 @@ export default async function NewProposalPage() {
       <BriefIntakeForm
         onSubmit={async (payload) => {
           "use server";
-          const scope = await extractStructuredScope({
-            rawBrief: payload.rawBrief,
-            optionalBudget: payload.optionalBudget,
-            optionalTargetTimeline: payload.optionalTargetTimeline,
-            templateId: payload.templateId,
-          });
-          const project = await createProposalProject({
-            userId,
-            clientName: payload.clientName,
-            projectType: payload.templateId,
-            serviceCategory: payload.templateId,
-            rawBrief: payload.rawBrief,
-            structuredScope: {
-              ...scope,
+          try {
+            const scope = await extractStructuredScope({
+              rawBrief: payload.rawBrief,
               optionalBudget: payload.optionalBudget,
               optionalTargetTimeline: payload.optionalTargetTimeline,
-            },
-          });
-          redirect(`/proposals/${project.id}`);
+              templateId: payload.templateId,
+            });
+            const cleanScope = JSON.parse(JSON.stringify({
+              ...scope,
+              optionalBudget: payload.optionalBudget || scope.optionalBudget,
+              optionalTargetTimeline: payload.optionalTargetTimeline || scope.optionalTargetTimeline,
+            }));
+            const project = await createProposalProject({
+              userId,
+              clientName: payload.clientName,
+              projectType: payload.templateId,
+              serviceCategory: payload.templateId,
+              rawBrief: payload.rawBrief,
+              structuredScope: cleanScope,
+            });
+            redirect(`/proposals/${project.id}`);
+          } catch (err) {
+            console.error("Failed to create proposal:", err);
+            throw new Error("Failed to create proposal. Please try again.");
+          }
         }}
       />
       <p className="mt-4 text-xs leading-relaxed text-slate-500">
