@@ -11,25 +11,25 @@ import type { Template } from "@/lib/templates/types";
 
 type Tab = "proposal" | "sow" | "quote";
 
+type DraftSet = {
+  proposal: { title: string; body: string };
+  sow: { title: string; body: string };
+  quote: { title: string; body: string };
+};
+
 type DocumentState = {
   proposal: string;
   sow: string;
   quote: string;
 };
 
-type Docs = {
-  proposal: { title: string; body: string };
-  sow: { title: string; body: string };
-  quote: { title: string; body: string };
-};
-
-export function ProposalWorkspaceClient({ proposalId, scope, template, clientName, docs }: { proposalId: string; scope: StructuredScope; template?: Template; clientName?: string; docs: Docs }) {
+export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName }: { proposalId: string; scope: StructuredScope; drafts: DraftSet; template?: Template; clientName?: string }) {
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
   const [active, setActive] = useState<Tab>("proposal");
   const [documents, setDocuments] = useState<DocumentState>({
-    proposal: docs.proposal.body,
-    sow: docs.sow.body,
-    quote: docs.quote.body,
+    proposal: drafts.proposal.body,
+    sow: drafts.sow.body,
+    quote: drafts.quote.body,
   });
 
   return (

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { generateAIDocuments } from "@/lib/ai/generate-documents";
+import { generatePolishedDocuments } from "@/lib/ai/generate-documents";
 import { getProposalProjectById } from "@/lib/data/proposal-projects";
 import { ExportPreviewClient } from "./export-preview-client";
 
@@ -11,7 +11,7 @@ export default async function ExportPreviewPage({ params }: { params: Promise<{ 
     throw new Error(`Proposal project not found: ${id}`);
   }
 
-  const drafts = await generateAIDocuments(
+  const drafts = await generatePolishedDocuments(
     project.structured_scope,
     undefined,
     project.client_name,

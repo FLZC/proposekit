@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getProposalProjectById } from "@/lib/data/proposal-projects";
-import { pickTemplate, generateAIDocuments } from "@/lib/ai/generate-documents";
+import { pickTemplate, generatePolishedDocuments } from "@/lib/ai/generate-documents";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { ProposalWorkspaceClient } from "./workspace-client";
 
@@ -17,24 +17,18 @@ export default async function ProposalWorkspacePage({ params }: { params: Promis
   }
 
   const project = await getProposalProjectById(id);
-  if (!project) notFound();
+
+  if (!project) {
+    notFound();
+  }
 
   const template = pickTemplate(project.project_type, project.service_category);
-
-  const docs = await generateAIDocuments(
+  const drafts = await generatePolishedDocuments(
     project.structured_scope,
     template,
     project.client_name,
     project.project_type,
   );
 
-  return (
-    <ProposalWorkspaceClient
-      proposalId={project.id}
-      scope={project.structured_scope}
-      template={template}
-      clientName={project.client_name}
-      docs={docs}
-    />
-  );
+  return <ProposalWorkspaceClient proposalId={project.id} scope={project.structured_scope} drafts={drafts} template={template} clientName={project.client_name} />;
 }
