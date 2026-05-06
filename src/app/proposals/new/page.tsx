@@ -25,7 +25,7 @@ export default async function NewProposalPage() {
           const project = await createProposalProject({
             userId,
             clientName: payload.clientName,
-            projectType: payload.projectType,
+            projectType: payload.templateId,
             serviceCategory: payload.templateId,
             rawBrief: payload.rawBrief,
             structuredScope: {

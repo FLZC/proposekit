@@ -6,7 +6,7 @@ const ZHIPU_MODEL = "glm-4-flash";
 const ZHIPU_BASE = "https://open.bigmodel.cn/api/paas/v4";
 
 export function buildExtractScopePrompt(input: {
-  projectType: string;
+  projectType?: string;
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
@@ -31,7 +31,7 @@ export function buildExtractScopePrompt(input: {
     '  "pricingNotes": "string — budget amount, payment terms, or pricing details from brief"',
     '}',
     "",
-    `Project type: ${input.projectType}`,
+    `Project type: ${input.projectType ?? "web/design project"}`,
     context ? `Additional context: ${context}` : "",
     `Raw brief: ${input.rawBrief}`,
     "",
@@ -56,7 +56,7 @@ function isTimelineLine(s: string) {
 }
 
 function fallbackScopeFromInput(input: {
-  projectType: string;
+  projectType?: string;
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
@@ -74,7 +74,7 @@ function fallbackScopeFromInput(input: {
     deliverables:
       deliverables.length > 0
         ? deliverables.slice(0, 5).map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-        : [`${input.projectType}`],
+        : [input.projectType ?? "Project"],
     assumptions: ["Client provides necessary materials and feedback"],
     exclusions: [],
     timeline: timelineLine,
@@ -92,7 +92,7 @@ function hasApiKey() {
 }
 
 export async function extractStructuredScope(input: {
-  projectType: string;
+  projectType?: string;
   rawBrief: string;
   optionalBudget?: string;
   optionalTargetTimeline?: string;
