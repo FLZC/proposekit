@@ -73,27 +73,42 @@ export function BriefIntakeForm({ onSubmit }: Props) {
       <div className="grid gap-5 md:grid-cols-2">
         <div className="grid gap-2">
           <label className="text-sm font-medium text-slate-100" htmlFor="optionalBudget">
-            Budget
+            Budget (USD)
           </label>
-          <input
+          <select
             id="optionalBudget"
             className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
-            placeholder="$8k-$12k"
             value={form.optionalBudget}
             onChange={(event) => setForm({ ...form, optionalBudget: event.target.value })}
-          />
+          >
+            <option value="">Not sure yet</option>
+            <option value="$1,000 – $3,000">$1,000 – $3,000</option>
+            <option value="$3,000 – $5,000">$3,000 – $5,000</option>
+            <option value="$5,000 – $10,000">$5,000 – $10,000</option>
+            <option value="$10,000 – $20,000">$10,000 – $20,000</option>
+            <option value="$20,000 – $50,000">$20,000 – $50,000</option>
+            <option value="$50,000+">$50,000+</option>
+          </select>
         </div>
         <div className="grid gap-2">
           <label className="text-sm font-medium text-slate-100" htmlFor="optionalTargetTimeline">
-            Target timeline
+            Timeline
           </label>
-          <input
+          <select
             id="optionalTargetTimeline"
             className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
-            placeholder="4 weeks"
             value={form.optionalTargetTimeline}
             onChange={(event) => setForm({ ...form, optionalTargetTimeline: event.target.value })}
-          />
+          >
+            <option value="">Not sure yet</option>
+            <option value="2 weeks">2 weeks</option>
+            <option value="4 weeks">4 weeks</option>
+            <option value="6 weeks">6 weeks</option>
+            <option value="8 weeks">8 weeks</option>
+            <option value="3 months">3 months</option>
+            <option value="6 months">6 months</option>
+            <option value="ongoing">Ongoing / monthly</option>
+          </select>
         </div>
       </div>
 

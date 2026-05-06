@@ -12,10 +12,10 @@ describe("BriefIntakeForm", () => {
     fireEvent.change(screen.getByLabelText("Client name"), {
       target: { value: "Acme Studio" },
     });
-    fireEvent.change(screen.getByLabelText("Budget"), {
-      target: { value: "$8k-$12k" },
+    fireEvent.change(screen.getByLabelText("Budget (USD)"), {
+      target: { value: "$5,000 – $10,000" },
     });
-    fireEvent.change(screen.getByLabelText("Target timeline"), {
+    fireEvent.change(screen.getByLabelText("Timeline"), {
       target: { value: "4 weeks" },
     });
     fireEvent.change(screen.getByLabelText("Brief or meeting notes"), {
@@ -30,7 +30,7 @@ describe("BriefIntakeForm", () => {
         clientName: "Acme Studio",
         templateId: "web_design",
         rawBrief: "Need a 5-page marketing site with CMS support.",
-        optionalBudget: "$8k-$12k",
+        optionalBudget: "$5,000 – $10,000",
         optionalTargetTimeline: "4 weeks",
       });
     });
