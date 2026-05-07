@@ -23,7 +23,7 @@ type DocumentState = {
   quote: string;
 };
 
-export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName }: { proposalId: string; scope: StructuredScope; drafts: DraftSet; template?: Template; clientName?: string }) {
+export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName, template }: { proposalId: string; scope: StructuredScope; drafts: DraftSet; template?: Template; clientName?: string }) {
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
   const [active, setActive] = useState<Tab>("proposal");
   const [documents, setDocuments] = useState<DocumentState>({
@@ -34,7 +34,7 @@ export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName 
 
   return (
     <main className="mx-auto grid min-h-screen max-w-7xl gap-6 px-6 py-12 lg:grid-cols-[320px_1fr]">
-      <ScopePanel scope={scope} riskTags={riskTags} />
+      <ScopePanel scope={scope} riskTags={riskTags} category={template?.category} />
 
       <section className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-slate-950/20">
         <div className="space-y-3">

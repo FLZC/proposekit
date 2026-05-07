@@ -1,7 +1,17 @@
 import type { StructuredScope } from "@/lib/proposals/types";
 import { RiskTagList } from "./risk-tag-list";
 
-export function ScopePanel({ scope, riskTags }: { scope: StructuredScope; riskTags: string[] }) {
+const FALLBACK: Record<string, string[]> = {
+  "web design": ["Website redesign", "UI/UX design", "Responsive layouts", "Design system"],
+  "web development": ["Custom website", "CMS integration", "Responsive frontend", "Backend API"],
+  "landing page": ["Landing page design", "Mobile responsive", "Form + analytics"],
+  branding: ["Logo suite", "Color palette", "Typography", "Brand guidelines"],
+  "monthly retainer": ["Maintenance & updates", "Security monitoring", "Performance optimization", "Content updates"],
+};
+
+export function ScopePanel({ scope, riskTags, category }: { scope: StructuredScope; riskTags: string[]; category?: string }) {
+  const defs = category ? FALLBACK[category] : undefined;
+  const dels = scope.deliverables.length > 0 ? scope.deliverables : defs;
   const isFallback = scope.extractionNotes?.includes("without AI");
   const showBadge = scope.extractionNotes != null;
   const badgeLabel = isFallback ? "No AI available" : "AI extracted";
@@ -31,14 +41,14 @@ export function ScopePanel({ scope, riskTags }: { scope: StructuredScope; riskTa
       <div className="space-y-2">
         <h2 className="text-sm font-medium text-slate-100">Deliverables</h2>
         <ul className="space-y-2 pl-5 text-sm leading-6 text-slate-300">
-          {scope.deliverables.length > 0 ? (
-            scope.deliverables.map((item) => (
+          {dels ? (
+            dels.map((item) => (
               <li key={item} className="list-disc">
                 {item}
               </li>
             ))
           ) : (
-            <li className="list-none text-slate-500 italic">No deliverables extracted</li>
+            <li className="list-none italic text-slate-500">Not specified</li>
           )}
         </ul>
       </div>
@@ -51,7 +61,7 @@ export function ScopePanel({ scope, riskTags }: { scope: StructuredScope; riskTa
       <div className="space-y-2">
         <h2 className="text-sm font-medium text-slate-100">Assumptions</h2>
         <p className="text-sm text-slate-300">
-          {scope.assumptions.length > 0 ? scope.assumptions.join(", ") : <span className="italic text-slate-500">No assumptions listed</span>}
+          {scope.assumptions.length > 0 ? scope.assumptions.join(", ") : <span className="italic text-slate-500">Standard assumptions apply</span>}
         </p>
       </div>
 
