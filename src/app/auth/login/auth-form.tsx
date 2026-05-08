@@ -37,9 +37,9 @@ export function AuthForm() {
   if (sent) {
     return (
       <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-center">
-        <p className="text-slate-200 font-medium">Check your email</p>
+        <p className="text-slate-50 font-medium">Check your email</p>
         <p className="mt-2 text-sm text-slate-400">
-          We sent a magic link to <strong className="text-slate-200">{email}</strong>. Click the link to sign in.
+          We sent a magic link to <strong className="text-slate-50">{email}</strong>. Click the link to sign in.
         </p>
       </div>
     );
@@ -48,7 +48,7 @@ export function AuthForm() {
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6">
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-slate-100" htmlFor="email">Email</label>
+        <label className="text-sm font-medium text-slate-50" htmlFor="email">Email</label>
         <input
           id="email"
           type="email"

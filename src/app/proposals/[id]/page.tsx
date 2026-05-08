@@ -30,5 +30,5 @@ export default async function ProposalWorkspacePage({ params }: { params: Promis
     project.project_type,
   );
 
-  return <ProposalWorkspaceClient proposalId={project.id} scope={project.structured_scope} drafts={drafts} template={template} clientName={project.client_name} />;
+  return <ProposalWorkspaceClient proposalId={project.id} scope={project.structured_scope} drafts={drafts} template={template} />;
 }

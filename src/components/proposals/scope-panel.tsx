@@ -17,7 +17,7 @@ export function ScopePanel({ scope, riskTags, category }: { scope: StructuredSco
   const badgeLabel = isFallback ? "No AI available" : "AI extracted";
   const badgeStyle = isFallback
     ? "bg-amber-400/15 text-amber-300"
-    : "bg-emerald-400/15 text-emerald-300";
+    : "bg-amber-400/15 text-amber-300";
 
   return (
     <aside className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-slate-950/20">
@@ -39,8 +39,8 @@ export function ScopePanel({ scope, riskTags, category }: { scope: StructuredSco
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-sm font-medium text-slate-100">Deliverables</h2>
-        <ul className="space-y-2 pl-5 text-sm leading-6 text-slate-300">
+        <h2 className="text-sm font-medium text-slate-50">Deliverables</h2>
+        <ul className="space-y-2 pl-5 text-sm leading-6 text-slate-400">
           {dels ? (
             dels.map((item) => (
               <li key={item} className="list-disc">
@@ -54,36 +54,36 @@ export function ScopePanel({ scope, riskTags, category }: { scope: StructuredSco
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-sm font-medium text-slate-100">Timeline</h2>
-        <p className="text-sm text-slate-300">{scope.timeline || <span className="italic text-slate-500">Not set</span>}</p>
+        <h2 className="text-sm font-medium text-slate-50">Timeline</h2>
+        <p className="text-sm text-slate-400">{scope.timeline || <span className="italic text-slate-500">Not set</span>}</p>
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-sm font-medium text-slate-100">Assumptions</h2>
-        <p className="text-sm text-slate-300">
+        <h2 className="text-sm font-medium text-slate-50">Assumptions</h2>
+        <p className="text-sm text-slate-400">
           {scope.assumptions.length > 0 ? scope.assumptions.join(", ") : <span className="italic text-slate-500">Standard assumptions apply</span>}
         </p>
       </div>
 
       {scope.exclusions.length > 0 && (
         <div className="space-y-2">
-          <h2 className="text-sm font-medium text-slate-100">Exclusions</h2>
-          <p className="text-sm text-slate-300">{scope.exclusions.join(", ")}</p>
+          <h2 className="text-sm font-medium text-slate-50">Exclusions</h2>
+          <p className="text-sm text-slate-400">{scope.exclusions.join(", ")}</p>
         </div>
       )}
 
       {scope.pricingNotes && (
         <div className="space-y-2">
-          <h2 className="text-sm font-medium text-slate-100">Pricing</h2>
-          <p className="text-sm capitalize text-slate-300">{scope.pricingModel.replace(/_/g, " ")}</p>
+          <h2 className="text-sm font-medium text-slate-50">Pricing</h2>
+          <p className="text-sm capitalize text-slate-400">{scope.pricingModel.replace(/_/g, " ")}</p>
           <p className="text-sm text-slate-400">{scope.pricingNotes}</p>
         </div>
       )}
 
       {scope.milestones.length > 0 && (
         <div className="space-y-2">
-          <h2 className="text-sm font-medium text-slate-100">Milestones</h2>
-          <ul className="space-y-1 pl-5 text-sm leading-6 text-slate-300">
+          <h2 className="text-sm font-medium text-slate-50">Milestones</h2>
+          <ul className="space-y-1 pl-5 text-sm leading-6 text-slate-400">
             {scope.milestones.map((m) => (
               <li key={m} className="list-disc">
                 {m}

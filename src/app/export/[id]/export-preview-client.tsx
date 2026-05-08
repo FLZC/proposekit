@@ -35,7 +35,7 @@ export function ExportPreviewClient({
         <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">Proposal export preview</p>
         <div className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight text-slate-50">Ready to export your proposal package</h1>
-          <p className="max-w-3xl text-base leading-7 text-slate-300">
+          <p className="max-w-3xl text-base leading-7 text-slate-400">
             Review each document, then download the PDF when you are ready to share it with your client.
           </p>
         </div>
@@ -63,7 +63,7 @@ export function ExportPreviewClient({
                 className={`min-h-10 rounded-xl px-4 py-2 text-sm font-medium transition ${
                   tab === t
                     ? "bg-slate-100 text-slate-950"
-                    : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                    : "bg-slate-800 text-slate-400 hover:bg-slate-700"
                 }`}
               >
                 {t.toUpperCase()}
@@ -84,7 +84,7 @@ export function ExportPreviewClient({
               Download PDF
             </Link>
             <Link
-              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-base font-medium text-slate-100 transition hover:border-slate-600 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-slate-900"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-base font-medium text-slate-50 transition hover:border-slate-700 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-slate-900"
               href={`/proposals/${proposalId}`}
             >
               Back to workspace

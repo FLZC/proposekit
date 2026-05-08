@@ -12,9 +12,12 @@ export default async function NewProposalPage() {
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-12">
       <section className="space-y-3">
         <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">New proposal</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-50 md:text-4xl">Turn a messy brief into a structured proposal workspace</h1>
-        <p className="max-w-3xl text-base leading-7 text-slate-300">
-          Paste notes, email threads, or a rough brief. ProposalCraft will extract a structured scope first, then generate aligned proposal, SOW, and quote outputs.
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-50 md:text-4xl">Create New Proposal</h1>
+        <p className="max-w-2xl text-base leading-7 text-slate-400">
+          Turn a messy client brief into a structured proposal workspace.
+        </p>
+        <p className="max-w-3xl text-sm leading-6 text-slate-400">
+          Paste project notes, email threads, or a rough project description. ProposeKit automatically extracts a clean structured scope, then generates polished Proposal, SOW, and Quote documents.
         </p>
       </section>
 
@@ -43,7 +46,7 @@ export default async function NewProposalPage() {
         }}
       />
       <p className="mt-4 text-xs leading-relaxed text-slate-500">
-        Disclaimer: Generated proposals, SOWs, and quotes are AI-assisted drafts. Review carefully before sending to clients. Not legal advice. Pricing is illustrative.
+        Disclaimer: Proposals, SOWs, and quotes are AI-assisted draft documents. Always review and customize before sharing with clients. Content does not constitute legal or professional advice. Pricing and timelines are illustrative estimates only.
       </p>
     </main>
   );

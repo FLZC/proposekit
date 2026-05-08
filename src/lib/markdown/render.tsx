@@ -35,7 +35,7 @@ export function markdownToHtml(text: string): React.ReactNode[] {
     const h3m = line.match(/^### (.+)$/);
     if (h3m) {
       nodes.push(
-        <h3 key={i} className="mt-4 mb-2 text-lg font-medium text-slate-100">
+        <h3 key={i} className="mt-4 mb-2 text-lg font-medium text-slate-50">
           {inlineFormat(h3m[1])}
         </h3>,
       );
@@ -65,7 +65,7 @@ export function markdownToHtml(text: string): React.ReactNode[] {
       nodes.push(
         <ol key={i} className="my-2 list-decimal pl-5 space-y-1">
           {items.map((item, idx) => (
-            <li key={idx} className="text-slate-300">
+            <li key={idx} className="text-slate-400">
               {inlineFormat(item)}
             </li>
           ))}
@@ -84,7 +84,7 @@ export function markdownToHtml(text: string): React.ReactNode[] {
       nodes.push(
         <ul key={i} className="my-2 list-disc pl-5 space-y-1">
           {items.map((item, idx) => (
-            <li key={idx} className="text-slate-300">
+            <li key={idx} className="text-slate-400">
               {inlineFormat(item)}
             </li>
           ))}
@@ -101,7 +101,7 @@ export function markdownToHtml(text: string): React.ReactNode[] {
     }
     if (paraLines.length > 0) {
       nodes.push(
-        <p key={i} className="my-1 text-slate-300 leading-relaxed">
+        <p key={i} className="my-1 text-slate-400 leading-relaxed">
           {inlineFormat(paraLines.join(" "))}
         </p>,
       );
@@ -123,7 +123,7 @@ function inlineFormat(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, idx) => {
     const bold = part.match(/^\*\*(.+)\*\*$/);
-    if (bold) return <strong key={idx} className="text-slate-100 font-semibold">{bold[1]}</strong>;
+    if (bold) return <strong key={idx} className="text-slate-50 font-semibold">{bold[1]}</strong>;
     return part;
   });
 }
@@ -144,7 +144,7 @@ function renderTable(lines: string[], baseKey: number): React.ReactNode {
         <thead>
           <tr className="border-b border-slate-700">
             {header.map((h, idx) => (
-              <th key={idx} className="py-2 pr-4 font-medium text-slate-200">
+              <th key={idx} className="py-2 pr-4 font-medium text-slate-50">
                 {inlineFormat(h)}
               </th>
             ))}

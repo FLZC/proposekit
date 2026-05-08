@@ -3,12 +3,14 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Current state
-- This repo now has an initial ProposalCraft MVP scaffold.
+- ProposeKit MVP is scaffolded and functional.
 - Key docs:
   - `APP_IDEAS.md`
   - `docs/superpowers/specs/2026-04-23-proposalcraft-design.md`
   - `docs/superpowers/plans/2026-04-23-proposalcraft-mvp.md`
-- Product remains a Web SaaS for proposal generation workflows.
+- Product is a Web SaaS for proposal generation workflows.
+- Landing, login, dashboard, workspace, export, terms, and privacy pages all exist.
+- Feedback widget + Umami analytics are integrated.
 
 ## Commands
 - `npm install` — install dependencies
@@ -20,13 +22,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx vitest run src/lib/proposals/__tests__/scope-schema.test.ts` — run a single test file
 
 ## Product focus
-- Planned product: **ProposalCraft**
+- Planned product: **ProposeKit**
 - Target users: 2-10 person web/design/dev agencies in the US market
 - Form factor: **Web SaaS**
 - Core job: turn messy client briefs into proposal, SOW, and quote outputs
 
 ## Product boundaries
-ProposalCraft is not planned as:
+ProposeKit is not planned as:
 - CRM / pipeline tool
 - contract signing product
 - project management suite

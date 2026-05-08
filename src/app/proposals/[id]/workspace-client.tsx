@@ -23,7 +23,7 @@ type DocumentState = {
   quote: string;
 };
 
-export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName, template }: { proposalId: string; scope: StructuredScope; drafts: DraftSet; template?: Template; clientName?: string }) {
+export function ProposalWorkspaceClient({ proposalId, scope, drafts, template }: { proposalId: string; scope: StructuredScope; drafts: DraftSet; template?: Template }) {
   const riskTags = useMemo(() => getScopeRiskTags(scope), [scope]);
   const [active, setActive] = useState<Tab>("proposal");
   const [documents, setDocuments] = useState<DocumentState>({
@@ -41,7 +41,7 @@ export function ProposalWorkspaceClient({ proposalId, scope, drafts, clientName,
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">Proposal workspace</p>
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold tracking-tight text-slate-50">Light editing with section regeneration</h1>
-            <p className="max-w-3xl text-sm leading-6 text-slate-300">
+            <p className="max-w-3xl text-sm leading-6 text-slate-400">
               Keep the structured scope canonical, make small wording edits in-place, and regenerate only the section you want to refresh.
             </p>
           </div>

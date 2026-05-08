@@ -100,10 +100,6 @@ function fallbackScopeFromInput(input: {
   });
 }
 
-function hasApiKey() {
-  return Boolean(process.env.DASHSCOPE_API_KEY);
-}
-
 export async function extractStructuredScope(input: {
   projectType?: string;
   rawBrief: string;

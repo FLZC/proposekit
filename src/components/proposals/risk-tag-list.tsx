@@ -4,7 +4,7 @@ export function RiskTagList({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <span
           key={tag}
-          className="rounded-full border border-amber-300/20 bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-200"
+          className="rounded-full border border-amber-300/20 bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-300"
         >
           {tag}
         </span>

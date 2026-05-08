@@ -16,7 +16,7 @@ export function PartialRegenerateMenu({ onSelect }: { onSelect: (section: Docume
         <button
           key={option.section}
           type="button"
-          className="min-h-11 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-600 hover:bg-slate-700"
+          className="min-h-11 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-50 transition hover:border-slate-700 hover:bg-slate-700"
           onClick={() => onSelect(option.section)}
         >
           {option.label}

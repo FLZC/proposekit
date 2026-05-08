@@ -11,12 +11,21 @@ export default async function DashboardPage() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-6 py-12">
+      <div className="flex items-center justify-between rounded-xl border border-emerald-800/40 bg-amber-400/15 px-5 py-3">
+        <p className="text-sm text-emerald-300/80">
+          <span className="font-medium text-slate-50">Free during beta.</span> No credit card needed.
+        </p>
+        <span className="rounded-full bg-amber-400/15 px-2.5 py-0.5 text-xs font-medium text-amber-300">
+          Beta
+        </span>
+      </div>
+
       <section className="flex flex-col gap-5 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl shadow-slate-950/20 md:flex-row md:items-end md:justify-between">
         <div className="space-y-3">
-          <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">ProposalCraft</p>
+          <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">ProposeKit</p>
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold tracking-tight text-slate-50 md:text-4xl">Proposal dashboard</h1>
-            <p className="max-w-2xl text-base leading-7 text-slate-300">
+            <p className="max-w-2xl text-base leading-7 text-slate-400">
               Review active proposal drafts, jump back into structured scope edits, and create a new proposal from a messy brief.
             </p>
           </div>
@@ -31,7 +40,7 @@ export default async function DashboardPage() {
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-slate-100">Recent proposals</h2>
+          <h2 className="text-lg font-medium text-slate-50">Recent proposals</h2>
           <p className="text-sm text-slate-400">Derived from a single structured scope source</p>
         </div>
 
@@ -49,7 +58,7 @@ export default async function DashboardPage() {
                     <p className="text-sm text-slate-400">{project.project_type}</p>
                   </div>
                   <div className="flex flex-col gap-1 text-sm text-slate-400 md:items-end">
-                    <span className="inline-flex w-fit rounded-full bg-slate-800 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-300">
+                    <span className="inline-flex w-fit rounded-full bg-slate-800 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-400">
                       {project.status}
                     </span>
                     <span>Updated {project.updated_at ? new Date(project.updated_at).toLocaleDateString() : "Recently"}</span>
@@ -60,7 +69,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/50 p-8">
-            <p className="text-base font-medium text-slate-100">No proposals yet</p>
+            <p className="text-base font-medium text-slate-50">No proposals yet</p>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
               Start with a client brief, then extract structured scope before generating proposal, SOW, and quote drafts.
             </p>

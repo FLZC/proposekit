@@ -57,7 +57,7 @@ export function renderSection(section: TemplateSection, ctx: TemplateContext, ca
   };
 }
 
-const DISCLAIMER = `\n\n---\n\n**Disclaimer:** This document was generated with AI assistance and is a starting point only. It does not constitute legal, financial, or professional advice. Review all content carefully before sending to clients. Pricing figures are illustrative estimates — adjust to match your actual rates. For legally binding contracts, consult a qualified attorney. ProposalCraft is not a law firm and assumes no liability for the use of these templates.`;
+const DISCLAIMER = `\n\n---\n\n**Disclaimer:** This document was generated with AI assistance and is a starting point only. It does not constitute legal, financial, or professional advice. Review all content carefully before sending to clients. Pricing figures are illustrative estimates — adjust to match your actual rates. For legally binding contracts, consult a qualified attorney. ProposeKit is not a law firm and assumes no liability for the use of these templates.`;
 
 export function renderProposal(template: Template, ctx: TemplateContext): { title: string; body: string } {
   const filled = template.proposal.map((s) => renderSection(s, ctx, template.category));
