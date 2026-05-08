@@ -87,7 +87,8 @@ export async function polishDocument(body: string): Promise<string> {
 
     if (!response.ok) return body;
     const data = await response.json();
-    return data.choices?.[0]?.message?.content ?? body;
+    const polished = data.choices?.[0]?.message?.content ?? body;
+    return polished;
   } catch {
     return body;
   }
