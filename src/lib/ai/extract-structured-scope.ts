@@ -2,8 +2,8 @@ import { normalizeStructuredScope } from "@/lib/proposals/scope-schema";
 import type { StructuredScope } from "@/lib/proposals/types";
 import { jsonOnlyInstruction } from "./prompts";
 
-const AI_MODEL = "qwen-turbo";
-const AI_BASE = "https://dashscope.aliyuncs.com/compatible-mode/v1";
+const AI_MODEL = "qwen-plus";
+const AI_BASE = "https://dashscope-us.aliyuncs.com/compatible-mode/v1";
 
 export function buildExtractScopePrompt(input: {
   projectType?: string;

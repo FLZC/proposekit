@@ -68,14 +68,14 @@ export async function polishDocument(body: string): Promise<string> {
   if (!apiKey) return body;
 
   try {
-    const response = await fetch("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions", {
+    const response = await fetch("https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "qwen-turbo",
+        model: "qwen-plus",
         messages: [
           { role: "system", content: POLISH_PROMPT },
           { role: "user", content: `Polish the text below:\n\n${body}` },

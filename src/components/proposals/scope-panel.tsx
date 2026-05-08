@@ -17,7 +17,7 @@ export function ScopePanel({ scope, riskTags, category }: { scope: StructuredSco
   const badgeLabel = isFallback ? "No AI available" : "AI extracted";
   const badgeStyle = isFallback
     ? "bg-amber-400/15 text-amber-300"
-    : "bg-amber-400/15 text-amber-300";
+    : "bg-emerald-400/15 text-emerald-300";
 
   return (
     <aside className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-slate-950/20">

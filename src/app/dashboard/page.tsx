@@ -11,11 +11,11 @@ export default async function DashboardPage() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-6 py-12">
-      <div className="flex items-center justify-between rounded-xl border border-emerald-800/40 bg-amber-400/15 px-5 py-3">
+      <div className="flex items-center justify-between rounded-xl border border-emerald-800/40 bg-emerald-950/30 px-5 py-3">
         <p className="text-sm text-emerald-300/80">
           <span className="font-medium text-slate-50">Free during beta.</span> No credit card needed.
         </p>
-        <span className="rounded-full bg-amber-400/15 px-2.5 py-0.5 text-xs font-medium text-amber-300">
+        <span className="rounded-full bg-emerald-400/15 px-2.5 py-0.5 text-xs font-medium text-emerald-300">
           Beta
         </span>
       </div>
