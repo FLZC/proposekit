@@ -123,7 +123,7 @@ export async function extractStructuredScope(input: {
       body: JSON.stringify({
         model: AI_MODEL,
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 1200,
+        max_tokens: 4000,
         temperature: 0.3,
       }),
     });
