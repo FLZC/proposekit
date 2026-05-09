@@ -136,12 +136,22 @@ export async function extractStructuredScope(input: {
 
     const data = await response.json();
     const text = data.choices?.[0]?.message?.content ?? "";
+    if (!text) {
+      console.error("AI returned empty response");
+      return fallbackScopeFromInput(input);
+    }
 
     const json = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
 
-    const scope = normalizeExtractedScope(JSON.parse(json));
-    scope.extractionNotes = "AI extracted";
-    return scope;
+    try {
+      const parsed = JSON.parse(json);
+      const scope = normalizeExtractedScope(parsed);
+      scope.extractionNotes = "AI extracted";
+      return scope;
+    } catch (parseError) {
+      console.error("AI JSON parse failed:", parseError, "Raw text:", text);
+      return fallbackScopeFromInput(input);
+    }
   } catch (error) {
     console.error("AI extraction failed:", error);
     return fallbackScopeFromInput(input);
