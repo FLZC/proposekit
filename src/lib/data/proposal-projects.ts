@@ -1,5 +1,5 @@
 import type { StructuredScope } from "@/lib/proposals/types";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getSupabaseServerClient, getSupabaseServiceClient } from "@/lib/supabase/server";
 
 export type ProposalProject = {
   id: string;
@@ -105,7 +105,7 @@ export async function createProposalProject(input: {
     return project;
   }
 
-  const supabase = await getSupabaseServerClient();
+  const supabase = await getSupabaseServiceClient();
   const { data, error } = await supabase
     .from("proposal_projects")
     .insert({

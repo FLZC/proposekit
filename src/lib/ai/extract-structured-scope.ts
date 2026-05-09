@@ -2,8 +2,8 @@ import { normalizeStructuredScope } from "@/lib/proposals/scope-schema";
 import type { StructuredScope } from "@/lib/proposals/types";
 import { jsonOnlyInstruction } from "./prompts";
 
-const AI_MODEL = "qwen-plus";
-const AI_BASE = "https://dashscope-us.aliyuncs.com/compatible-mode/v1";
+const AI_MODEL = "gemini-2.5-flash";
+const AI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai";
 
 export function buildExtractScopePrompt(input: {
   projectType?: string;
@@ -107,7 +107,7 @@ export async function extractStructuredScope(input: {
   optionalTargetTimeline?: string;
   templateId?: string;
 }): Promise<StructuredScope> {
-  const apiKey = process.env.DASHSCOPE_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return fallbackScopeFromInput(input);
   }
