@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { DocumentEditor } from "@/components/proposals/document-editor";
 import { DocumentTabs } from "@/components/proposals/document-tabs";
 import { ExportButton } from "@/components/proposals/export-button";
 import { ScopePanel } from "@/components/proposals/scope-panel";
 import { getScopeRiskTags } from "@/lib/proposals/risk-tags";
+import { polishProposalAction } from "@/lib/ai/polish-action";
 import type { StructuredScope } from "@/lib/proposals/types";
 import type { Template } from "@/lib/templates/types";
 
@@ -31,6 +32,22 @@ export function ProposalWorkspaceClient({ proposalId, scope, drafts, template }:
     sow: drafts.sow.body,
     quote: drafts.quote.body,
   });
+  const polished = useRef(false);
+
+  useEffect(() => {
+    if (polished.current) return;
+    polished.current = true;
+    (async () => {
+      try {
+        const body = await polishProposalAction(drafts.proposal.body);
+        if (body) {
+          setDocuments((prev) => ({ ...prev, proposal: body }));
+        }
+      } catch {
+        // keep static draft if polish fails
+      }
+    })();
+  }, [drafts.proposal.body]);
 
   return (
     <main className="mx-auto grid min-h-screen max-w-7xl gap-6 px-6 py-12 lg:grid-cols-[320px_1fr]">
