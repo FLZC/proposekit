@@ -1,7 +1,8 @@
-function Shimmer({ className }: { className?: string }) {
+function Shimmer({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <div
       className={`relative overflow-hidden rounded bg-slate-100 before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.8s_ease-in-out_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent ${className ?? ""}`}
+      style={style}
     />
   );
 }
