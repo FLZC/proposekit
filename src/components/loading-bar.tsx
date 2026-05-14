@@ -67,7 +67,7 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
         style={{ opacity: phase !== "idle" ? 1 : 0 }}
       >
         <div
-          className="h-full bg-amber-400 transition-all duration-300 ease-out rounded-r-full"
+          className={`h-full bg-amber-400 ease-out rounded-r-full ${progress > 0 ? "transition-all duration-300" : ""}`}
           style={{
             width: `${progress}%`,
             boxShadow: progress > 0 ? "0 0 6px rgba(196,112,79,0.4)" : "none",
