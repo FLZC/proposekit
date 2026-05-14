@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useLoading } from "@/components/loading-bar";
 
 const TEMPLATES = [
   { value: "web_design", label: "Web Design" },
-  { value: "landing_page", label: "Landing Page" },
-  { value: "branding_package", label: "Branding" },
-  { value: "monthly_retainer", label: "Website Retainer" },
-  { value: "website_development", label: "Development" },
+  { value: "website_development", label: "Website Development" },
+  { value: "landing_page", label: "Landing Pages" },
+  { value: "branding_package", label: "Branding Packages" },
+  { value: "monthly_retainer", label: "Monthly Retainers" },
 ];
 
 type Props = {
@@ -28,39 +29,48 @@ export function BriefIntakeForm({ onSubmit }: Props) {
     optionalBudget: "",
     optionalTargetTimeline: "",
   });
+  const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const loading = useLoading();
 
   return (
     <form
-      className="grid gap-5 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-slate-950/20"
+      className="grid gap-6 rounded-xl border border-slate-200 bg-white p-8 shadow-sm"
       onSubmit={(event) => {
         event.preventDefault();
+        loading.start();
         startTransition(async () => {
-          await onSubmit({
-            ...form,
-          });
+          try {
+            setError("");
+            await onSubmit({ ...form });
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+            setError(msg);
+            loading.done();
+          }
         });
       }}
     >
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-slate-50" htmlFor="clientName">
+        <label className="text-sm font-medium uppercase tracking-[0.04em] text-slate-500" htmlFor="clientName">
           Client name
         </label>
         <input
           id="clientName"
-          className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+          className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 font-body"
           placeholder="e.g. Acme Studio"
           required
+          maxLength={200}
           value={form.clientName}
           onChange={(event) => setForm({ ...form, clientName: event.target.value })}
         />
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-slate-50" htmlFor="templateId">Project type</label>
+        <label className="text-sm font-medium uppercase tracking-[0.04em] text-slate-500" htmlFor="templateId">Project type</label>
         <select
           id="templateId"
-          className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+          className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 font-body"
           value={form.templateId}
           onChange={(event) => setForm({ ...form, templateId: event.target.value })}
         >
@@ -72,12 +82,12 @@ export function BriefIntakeForm({ onSubmit }: Props) {
 
       <div className="grid gap-5 md:grid-cols-2">
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-slate-50" htmlFor="optionalBudget">
+          <label className="text-sm font-medium uppercase tracking-[0.04em] text-slate-500" htmlFor="optionalBudget">
             Budget (USD)
           </label>
           <select
             id="optionalBudget"
-            className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+            className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 font-body"
             value={form.optionalBudget}
             onChange={(event) => setForm({ ...form, optionalBudget: event.target.value })}
           >
@@ -91,12 +101,12 @@ export function BriefIntakeForm({ onSubmit }: Props) {
           </select>
         </div>
         <div className="grid gap-2">
-          <label className="text-sm font-medium text-slate-50" htmlFor="optionalTargetTimeline">
+          <label className="text-sm font-medium uppercase tracking-[0.04em] text-slate-500" htmlFor="optionalTargetTimeline">
             Timeline
           </label>
           <select
             id="optionalTargetTimeline"
-            className="min-h-11 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+            className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 font-body"
             value={form.optionalTargetTimeline}
             onChange={(event) => setForm({ ...form, optionalTargetTimeline: event.target.value })}
           >
@@ -113,28 +123,35 @@ export function BriefIntakeForm({ onSubmit }: Props) {
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-slate-50" htmlFor="rawBrief">
+        <label className="text-sm font-medium uppercase tracking-[0.04em] text-slate-500" htmlFor="rawBrief">
           Brief or meeting notes
         </label>
         <textarea
           id="rawBrief"
-          className="min-h-48 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-base text-slate-50 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-300/30"
+          className="min-h-40 rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 font-body leading-relaxed"
           placeholder="Paste client brief, meeting notes, or email correspondence."
           required
+          maxLength={50000}
           value={form.rawBrief}
           onChange={(event) => setForm({ ...form, rawBrief: event.target.value })}
         />
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-500">
           We&apos;ll extract a structured scope, flag missing details, and generate ready-to-send proposal drafts.
         </p>
       </div>
 
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {error}
+        </div>
+      )}
+
       <button
-        className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-amber-400 px-4 py-3 text-base font-medium text-slate-950 transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60 md:w-fit"
+        className="inline-flex w-full items-center justify-center rounded-lg bg-slate-900 px-6 py-3 text-sm font-medium text-slate-50 transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 md:w-fit"
         type="submit"
         disabled={isPending || !form.clientName.trim() || !form.rawBrief.trim()}
       >
-        {isPending ? "Extracting Scope..." : "Extract Scope"}
+        {isPending ? "Extracting Scope..." : "Extract Structured Scope →"}
       </button>
     </form>
   );

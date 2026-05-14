@@ -8,7 +8,7 @@ export function DocumentTabs({
   onChange: (value: "proposal" | "sow" | "quote") => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2" role="tablist" aria-label="Document type">
+    <div className="inline-flex rounded-lg bg-slate-200 p-0.5" role="tablist" aria-label="Document type">
       {(["proposal", "sow", "quote"] as const).map((tab) => (
         <button
           key={tab}
@@ -17,8 +17,8 @@ export function DocumentTabs({
           aria-selected={active === tab}
           className={
             active === tab
-              ? "min-h-11 rounded-xl bg-slate-100 px-4 py-2 text-sm font-medium text-slate-950"
-              : "min-h-11 rounded-xl bg-slate-800 px-4 py-2 text-sm font-medium text-slate-400"
+              ? "rounded-md bg-white px-4 py-1.5 text-sm font-medium text-slate-900 shadow-sm"
+              : "rounded-md px-4 py-1.5 text-sm font-medium text-slate-500 transition hover:text-slate-700"
           }
           onClick={() => onChange(tab)}
         >

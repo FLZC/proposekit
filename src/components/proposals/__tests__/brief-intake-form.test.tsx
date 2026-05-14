@@ -22,7 +22,7 @@ describe("BriefIntakeForm", () => {
       target: { value: "Need a 5-page marketing site with CMS support." },
     });
 
-    const submitButton = screen.getByRole("button", { name: "Extract Scope" });
+    const submitButton = screen.getByRole("button", { name: "Extract Structured Scope →" });
     fireEvent.submit(submitButton.closest("form") as HTMLFormElement);
 
     await waitFor(() => {
