@@ -2,9 +2,20 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 const getProposalProjectById = vi.fn();
+const getGeneratedDocuments = vi.fn().mockResolvedValue(null);
+const upsertGeneratedDocument = vi.fn().mockResolvedValue({});
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}));
 
 vi.mock("@/lib/data/proposal-projects", () => ({
   getProposalProjectById,
+}));
+
+vi.mock("@/lib/data/generated-documents", () => ({
+  getGeneratedDocuments,
+  upsertGeneratedDocument,
 }));
 
 describe("ProposalWorkspacePage", () => {
@@ -32,6 +43,6 @@ describe("ProposalWorkspacePage", () => {
     expect(editor.value).toContain("Analytics dashboard");
     expect(editor.value).toContain("6 weeks");
     expect(editor.value).toContain("$12,000 fixed fee");
-    expect(screen.getByRole("link", { name: "Export & download" })).toHaveAttribute("href", "/export/project-123");
+    expect(screen.getByRole("button", { name: "Export PDF ↗" })).toBeInTheDocument();
   });
 });

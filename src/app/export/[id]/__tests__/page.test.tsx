@@ -2,9 +2,14 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 const getProposalProjectById = vi.fn();
+const getGeneratedDocuments = vi.fn().mockResolvedValue(null);
 
 vi.mock("@/lib/data/proposal-projects", () => ({
   getProposalProjectById,
+}));
+
+vi.mock("@/lib/data/generated-documents", () => ({
+  getGeneratedDocuments,
 }));
 
 describe("ExportPreviewPage", () => {
@@ -26,12 +31,9 @@ describe("ExportPreviewPage", () => {
     const { default: ExportPreviewPage } = await import("../page");
     render(await ExportPreviewPage({ params: Promise.resolve({ id: "project-123" }) }));
 
-    expect(screen.getByText("Proposal export preview")).toBeInTheDocument();
+    expect(screen.getByText("Export preview")).toBeInTheDocument();
     expect(screen.getByText("Northwind Studio")).toBeInTheDocument();
     expect(screen.getAllByText(/Analytics dashboard/).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: "Download PDF" })).toHaveAttribute(
-      "href",
-      "/export/project-123/download",
-    );
+    expect(screen.getByRole("button", { name: "Download PDF" })).toBeInTheDocument();
   });
 });

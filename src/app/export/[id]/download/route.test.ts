@@ -1,19 +1,32 @@
 import { describe, expect, it, vi } from "vitest";
 
 const getProposalProjectById = vi.fn();
-const renderToBuffer = vi.fn();
+const getCurrentUser = vi.fn().mockResolvedValue(null);
+const getGeneratedDocuments = vi.fn().mockResolvedValue(null);
+const generatePdf = vi.fn();
 
 vi.mock("@/lib/data/proposal-projects", () => ({
   getProposalProjectById,
 }));
 
-vi.mock("@react-pdf/renderer", () => ({
-  Document: "Document",
-  Page: "Page",
-  Text: "Text",
-  View: "View",
-  renderToBuffer,
-  StyleSheet: { create: (s: Record<string, unknown>) => s },
+vi.mock("@/lib/data/generated-documents", () => ({
+  getGeneratedDocuments,
+}));
+
+vi.mock("@/lib/supabase/server", () => ({
+  getCurrentUser,
+}));
+
+vi.mock("@/lib/templates/render", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/templates/render")>();
+  return {
+    ...actual,
+    projectTypeLabel: (s: string) => s,
+  };
+});
+
+vi.mock("./pdf", () => ({
+  generatePdf,
 }));
 
 describe("export download route", () => {
@@ -31,7 +44,7 @@ describe("export download route", () => {
         pricingNotes: "$12,000 fixed fee",
       },
     });
-    renderToBuffer.mockResolvedValue(new Uint8Array([1, 2, 3]));
+    generatePdf.mockResolvedValue(new Uint8Array([1, 2, 3]));
 
     const { GET } = await import("./route");
     const response = await GET(new Request("http://localhost/export/project-123/download"), {
@@ -39,7 +52,7 @@ describe("export download route", () => {
     });
 
     expect(getProposalProjectById).toHaveBeenCalledWith("project-123");
-    expect(renderToBuffer).toHaveBeenCalled();
+    expect(generatePdf).toHaveBeenCalled();
     expect(response.headers.get("Content-Type")).toBe("application/pdf");
     expect(response.headers.get("Content-Disposition")).toBe('attachment; filename="proposal-Northwind-Studio.pdf"');
   });

@@ -6,20 +6,18 @@ import { getCurrentUser } from "@/lib/supabase/server";
 
 export default async function NewProposalPage() {
   const user = await getCurrentUser();
-  const userId = user?.id ?? process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "00000000-0000-0000-0000-000000000001";
+  if (!user) redirect("/auth/login?next=/proposals/new");
+  const userId = user.id;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-6 py-12">
-      <section className="space-y-3">
-        <p className="text-sm font-medium uppercase tracking-[0.18em] text-amber-300">New proposal</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-50 md:text-4xl">Create New Proposal</h1>
-        <p className="max-w-2xl text-base leading-7 text-slate-400">
-          Turn a messy client brief into a structured proposal workspace.
+    <main className="mx-auto w-full max-w-2xl px-6 py-12">
+      <div className="mb-8">
+        <p className="text-sm font-medium uppercase tracking-[0.12em] text-amber-500 mb-2">New proposal</p>
+        <h1 className="font-display text-3xl font-medium text-slate-900 mb-3">Create New Proposal</h1>
+        <p className="text-sm leading-relaxed text-slate-500">
+          Paste project notes, email threads, or a rough project description. We&apos;ll extract a clean structured scope, then generate polished Proposal, SOW, and Quote documents.
         </p>
-        <p className="max-w-3xl text-sm leading-6 text-slate-400">
-          Paste project notes, email threads, or a rough project description. ProposeKit automatically extracts a clean structured scope, then generates polished Proposal, SOW, and Quote documents.
-        </p>
-      </section>
+      </div>
 
       <BriefIntakeForm
         onSubmit={async (payload) => {
@@ -29,6 +27,7 @@ export default async function NewProposalPage() {
             optionalBudget: payload.optionalBudget,
             optionalTargetTimeline: payload.optionalTargetTimeline,
             templateId: payload.templateId,
+            userId,
           });
           const project = await createProposalProject({
             userId,
@@ -45,9 +44,6 @@ export default async function NewProposalPage() {
           redirect(`/proposals/${project.id}`);
         }}
       />
-      <p className="mt-4 text-xs leading-relaxed text-slate-500">
-        Disclaimer: Proposals, SOWs, and quotes are AI-assisted draft documents. Always review and customize before sharing with clients. Content does not constitute legal or professional advice. Pricing and timelines are illustrative estimates only.
-      </p>
     </main>
   );
 }

@@ -1,5 +1,7 @@
-import { generateStaticDocumentDrafts } from "@/lib/ai/generate-documents";
+import { notFound } from "next/navigation";
+import { generateStaticDocumentDrafts, pickTemplate } from "@/lib/ai/generate-documents";
 import { getProposalProjectById } from "@/lib/data/proposal-projects";
+import { getGeneratedDocuments } from "@/lib/data/generated-documents";
 import { ExportPreviewClient } from "./export-preview-client";
 
 export default async function ExportPreviewPage({ params }: { params: Promise<{ id: string }> }) {
@@ -7,15 +9,24 @@ export default async function ExportPreviewPage({ params }: { params: Promise<{ 
   const project = await getProposalProjectById(id);
 
   if (!project) {
-    throw new Error(`Proposal project not found: ${id}`);
+    notFound();
   }
 
-  const drafts = generateStaticDocumentDrafts(
-    project.structured_scope,
-    undefined,
-    project.client_name,
-    project.project_type,
-  );
+  // Use saved documents if available, otherwise generate
+  const saved = await getGeneratedDocuments(project.id);
+
+  const drafts = saved
+    ? {
+        proposal: saved.proposal ?? { title: "", body: "" },
+        sow: saved.sow ?? { title: "", body: "" },
+        quote: saved.quote ?? { title: "", body: "" },
+      }
+    : generateStaticDocumentDrafts(
+        project.structured_scope,
+        pickTemplate(project.project_type, project.service_category),
+        project.client_name,
+        project.project_type,
+      );
 
   return (
     <ExportPreviewClient

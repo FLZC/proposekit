@@ -33,7 +33,7 @@ describe("DashboardPage", () => {
     const { default: DashboardPage } = await import("@/app/dashboard/page");
     render(await DashboardPage());
 
-    expect(screen.getByText("Proposal dashboard")).toBeInTheDocument();
+    expect(screen.getByText("Your proposals")).toBeInTheDocument();
     expect(screen.getByText("Acme Studio")).toBeInTheDocument();
   });
 });
