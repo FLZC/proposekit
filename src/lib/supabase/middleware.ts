@@ -21,7 +21,17 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  await supabase.auth.getUser();
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      const loginUrl = new URL("/auth/login", request.url);
+      loginUrl.searchParams.set("next", request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  } catch {
+    // Auth service unreachable — fail closed, redirect to login
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
 
   return response;
 }

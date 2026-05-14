@@ -4,10 +4,16 @@ import { createServerClient } from "@supabase/ssr";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const nextParam = searchParams.get("next") ?? "/dashboard";
+
+  // Only allow relative paths — block userinfo (@) and protocol-relative (//) attacks
+  const safeNext =
+    nextParam.startsWith("/") && !nextParam.includes("@") && !nextParam.includes("//")
+      ? nextParam
+      : "/dashboard";
 
   if (code) {
-    const response = NextResponse.redirect(`${origin}${next}`);
+    const response = NextResponse.redirect(new URL(safeNext, origin).toString());
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

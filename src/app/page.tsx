@@ -1,64 +1,76 @@
-import Link from "next/link";
+import Image from "next/image";
+import { LoadingLink } from "@/components/loading-link";
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center gap-8 px-6 py-16">
-      <div className="flex items-center gap-3">
-        <p className="text-sm uppercase tracking-[0.2em] text-amber-300">ProposeKit</p>
-        <span className="rounded-full bg-amber-400/15 px-3 py-0.5 text-xs font-medium text-amber-300">
-          Free during beta
-        </span>
-      </div>
-
-      <div className="space-y-4">
-        <h1 className="text-5xl font-semibold leading-tight italic">
-          Turn messy client briefs into polished proposals, SOWs, and tiered quotes.
+    <main>
+      {/* Hero */}
+      <section className="mx-auto max-w-4xl px-6 py-20 text-center">
+        <div className="inline-block rounded-full bg-amber-100 px-4 py-1.5 text-xs font-medium tracking-[0.08em] uppercase text-amber-500 mb-6 animate-fade-up">
+          AI Copilot for Agency Proposals
+        </div>
+        <h1 className="font-display text-5xl md:text-6xl font-medium leading-[1.1] text-slate-900 mb-6 animate-fade-up animate-delay-100">
+          Turn messy briefs into{" "}
+          <em className="italic text-amber-400">client-ready</em>{" "}
+          proposals, SOWs &amp; quotes
         </h1>
-        <p className="max-w-2xl text-lg text-slate-400">
-          Your AI copilot for freelance designers, developers, and small creative agencies. Paste a brief, get a complete proposal package in minutes — not hours.
+        <p className="mx-auto max-w-xl text-lg leading-relaxed text-slate-500 mb-8 animate-fade-up animate-delay-200">
+          Paste a client brief. Get a structured scope, polished proposal, SOW, and pricing — all from a single source of truth. No more starting from scratch.
         </p>
-      </div>
-
-      <Link
-        className="inline-flex w-fit rounded-xl bg-amber-400 px-6 py-3 text-base font-medium text-slate-950 transition hover:bg-amber-300"
-        href="/proposals/new"
-      >
-        Try it free — no credit card required
-      </Link>
-
-      <section className="mt-8 grid gap-6 md:grid-cols-3">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
-          <p className="mb-2 text-2xl font-bold text-amber-300">1</p>
-          <h2 className="mb-2 text-lg font-semibold text-slate-50">Paste a brief</h2>
-          <p className="text-sm leading-relaxed text-slate-400">
-            Drop in client notes, email threads, or a rough project description. No formatting required.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
-          <p className="mb-2 text-2xl font-bold text-amber-300">2</p>
-          <h2 className="mb-2 text-lg font-semibold text-slate-50">AI extracts the scope</h2>
-          <p className="text-sm leading-relaxed text-slate-400">
-            Deliverables, timeline, assumptions, exclusions, and pricing — automatically structured for you to review.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
-          <p className="mb-2 text-2xl font-bold text-amber-300">3</p>
-          <h2 className="mb-2 text-lg font-semibold text-slate-50">Export and send</h2>
-          <p className="text-sm leading-relaxed text-slate-400">
-            Get a polished proposal, SOW, and three-tier quote — ready to download as PDF and share with your client.
-          </p>
+        <div className="flex items-center justify-center gap-4 animate-fade-up animate-delay-300">
+          <LoadingLink
+            className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-6 py-3 text-sm font-medium text-slate-50 transition hover:bg-slate-700"
+            href="/proposals/new"
+          >
+            Try the workspace →
+          </LoadingLink>
         </div>
       </section>
 
-      <hr className="mt-8 border-slate-800" />
-      <section className="mt-8">
-        <h2 className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-slate-500">Built for your workflow</h2>
-        <div className="flex flex-wrap gap-2">
+      {/* Feature strip */}
+      <section id="features" className="mx-auto max-w-4xl border-t border-slate-200 px-6 py-16">
+        <div className="grid gap-8 md:grid-cols-3">
+          <div className="text-center animate-fade-up">
+            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-lg bg-amber-100 text-lg">
+              📋
+            </div>
+            <h3 className="font-display text-lg font-semibold text-slate-900 mb-2">Paste any brief</h3>
+            <p className="text-sm leading-relaxed text-slate-500">
+              Email threads, meeting notes, napkin sketches — drop them in and let AI extract the structure.
+            </p>
+          </div>
+          <div className="text-center animate-fade-up animate-delay-100">
+            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-lg bg-sage-100 text-lg">
+              ◎
+            </div>
+            <h3 className="font-display text-lg font-semibold text-slate-900 mb-2">One source of truth</h3>
+            <p className="text-sm leading-relaxed text-slate-500">
+              Structured Scope drives everything. Proposal, SOW, and quote always stay in sync.
+            </p>
+          </div>
+          <div className="text-center animate-fade-up animate-delay-200">
+            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-lg bg-amber-100 text-lg">
+              ↗
+            </div>
+            <h3 className="font-display text-lg font-semibold text-slate-900 mb-2">Export &amp; send</h3>
+            <p className="text-sm leading-relaxed text-slate-500">
+              PDF, copy, or share. From brief to sendable proposal package in about 10 minutes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Templates */}
+      <section className="mx-auto max-w-4xl border-t border-slate-200 px-6 py-16">
+        <h2 className="mb-6 text-center font-display text-2xl font-medium text-slate-900">
+          Built for your workflow
+        </h2>
+        <div className="flex flex-wrap justify-center gap-3">
           {["Web Design", "Website Development", "Landing Pages", "Branding Packages", "Monthly Retainers"].map(
             (t) => (
               <span
                 key={t}
-                className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-400"
+                className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm text-slate-600"
               >
                 {t}
               </span>
@@ -66,18 +78,6 @@ export default function HomePage() {
           )}
         </div>
       </section>
-
-      <p className="mt-12 max-w-2xl text-xs leading-relaxed text-slate-500">
-        Disclaimer: ProposeKit generates proposal, SOW, and quote drafts using AI. All output is a starting
-        point only — not legal, financial, or professional advice. Pricing figures are illustrative. Review and
-        adjust all content before sending to clients. ProposeKit assumes no liability for the use of generated
-        documents.
-      </p>
-
-      <div className="mt-2 flex gap-4 text-xs text-slate-500">
-        <Link href="/privacy" className="underline hover:text-slate-400 transition">Privacy Policy</Link>
-        <Link href="/terms" className="underline hover:text-slate-400 transition">Terms of Service</Link>
-      </div>
     </main>
   );
 }

@@ -1,10 +1,10 @@
 import { type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
-const PUBLIC_PATHS = ["/privacy", "/terms", "/auth", "/"];
+const PUBLIC_PATHS = ["/", "/privacy", "/terms", "/auth/login", "/auth/callback"];
 
 function isPublic(path: string) {
-  return PUBLIC_PATHS.some((p) => path === p || (p !== "/" && path.startsWith(p)));
+  return PUBLIC_PATHS.some((p) => path === p || (p !== "/" && path.startsWith(`${p}/`)));
 }
 
 export async function middleware(request: NextRequest) {

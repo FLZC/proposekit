@@ -50,18 +50,8 @@ export async function submitFeedback(formData: FormData) {
   }
 
   try {
-    const { createServerClient } = await import("@supabase/ssr");
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return [];
-          },
-        },
-      },
-    );
+    const { getSupabaseServerClient } = await import("@/lib/supabase/server");
+    const supabase = await getSupabaseServerClient();
 
     const { error } = await supabase
       .from("user_feedback")
@@ -72,9 +62,13 @@ export async function submitFeedback(formData: FormData) {
         page_url: pageUrl,
       });
 
-    if (error) return { error: error.message };
+    if (error) {
+      console.error("Feedback insert failed:", error);
+      return { error: "Failed to submit feedback. Please try again." };
+    }
     return { success: true };
   } catch (err) {
-    return { error: err instanceof Error ? err.message : "Unknown error" };
+    console.error("Feedback submission failed:", err);
+    return { error: "Failed to submit feedback. Please try again." };
   }
 }

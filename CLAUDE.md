@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Current state
-- ProposeKit MVP is scaffolded and functional.
+- ProposalCraft MVP is scaffolded and functional.
 - Key docs:
   - `APP_IDEAS.md`
   - `docs/superpowers/specs/2026-04-23-proposalcraft-design.md`
@@ -22,13 +22,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx vitest run src/lib/proposals/__tests__/scope-schema.test.ts` — run a single test file
 
 ## Product focus
-- Planned product: **ProposeKit**
+- Planned product: **ProposalCraft**
 - Target users: 2-10 person web/design/dev agencies in the US market
 - Form factor: **Web SaaS**
 - Core job: turn messy client briefs into proposal, SOW, and quote outputs
 
 ## Product boundaries
-ProposeKit is not planned as:
+ProposalCraft is not planned as:
 - CRM / pipeline tool
 - contract signing product
 - project management suite

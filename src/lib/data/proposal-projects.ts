@@ -1,5 +1,5 @@
 import type { StructuredScope } from "@/lib/proposals/types";
-import { getSupabaseServerClient, getSupabaseServiceClient } from "@/lib/supabase/server";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 export type ProposalProject = {
   id: string;
@@ -77,7 +77,7 @@ export type ProposalProjectSummary = {
 };
 
 function generateId() {
-  return `proj_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  return `proj_${crypto.randomUUID()}`;
 }
 
 export async function createProposalProject(input: {
@@ -105,7 +105,7 @@ export async function createProposalProject(input: {
     return project;
   }
 
-  const supabase = await getSupabaseServiceClient();
+  const supabase = await getSupabaseServerClient();
   const { data, error } = await supabase
     .from("proposal_projects")
     .insert({
