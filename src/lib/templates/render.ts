@@ -30,6 +30,18 @@ const CATEGORY_DEFAULTS: Record<string, { deliverables: string[]; description: s
   },
 };
 
+const PROJECT_TYPE_LABELS: Record<string, string> = {
+  web_design: "Web Design",
+  website_development: "Website Development",
+  landing_page: "Landing Page",
+  branding_package: "Branding Package",
+  monthly_retainer: "Monthly Retainer",
+};
+
+export function projectTypeLabel(slug: string): string {
+  return PROJECT_TYPE_LABELS[slug] ?? slug;
+}
+
 function fill(template: string, ctx: TemplateContext, category = ""): string {
   const def = CATEGORY_DEFAULTS[category];
   const defaultDesc = def?.description ?? "a custom project";
@@ -38,16 +50,18 @@ function fill(template: string, ctx: TemplateContext, category = ""): string {
 
   return template
     .replace(/\{\{clientName\}\}/g, ctx.clientName)
-    .replace(/\{\{projectType\}\}/g, ctx.projectType)
+    .replace(/\{\{projectType\}\}/g, projectTypeLabel(ctx.projectType))
     .replace(/\{\{deliverables\}\}/g, dels.map((d) => `— ${d}`).join("\n"))
     .replace(/\{\{deliverablesInline\}\}/g, ctx.scope.deliverables.length > 0 ? ctx.scope.deliverables.join(", ") : defaultDesc)
     .replace(/\{\{timeline\}\}/g, ctx.scope.timeline || "To be determined")
-    .replace(/\{\{milestones\}\}/g, ctx.scope.milestones.map((m) => `— ${m}`).join("\n") || "— Milestones to be defined")
+    .replace(/\{\{milestones\}\}/g, ctx.scope.milestones.map((m) => `— ${m}`).join("\n") || "— To be scheduled at kickoff")
     .replace(/\{\{assumptions\}\}/g, ctx.scope.assumptions.map((a) => `— ${a}`).join("\n") || "— Client provides necessary materials and timely feedback")
-    .replace(/\{\{exclusions\}\}/g, ctx.scope.exclusions.map((e) => `— ${e}`).join("\n") || "— None explicitly listed")
+    .replace(/\{\{exclusions\}\}/g, ctx.scope.exclusions.map((e) => `— ${e}`).join("\n") || "— No additional exclusions beyond those stated above")
     .replace(/\{\{pricingModel\}\}/g, ctx.scope.pricingModel || "fixed_price")
     .replace(/\{\{pricingNotes\}\}/g, ctx.scope.pricingNotes || "Contact for pricing details")
-    .replace(/\{\{budget\}\}/g, ctx.scope.optionalBudget || ctx.scope.pricingNotes || "Not specified");
+    .replace(/\{\{budget\}\}/g, ctx.scope.optionalBudget || ctx.scope.pricingNotes || "Not specified")
+    .replace(/\{\{packagingExclusion\}\}/g, dels.some((d) => d.toLowerCase().includes("packaging")) ? "" : "— Packaging design or production\n")
+    .replace(/\{\{#ifNot\s+clientProvidesDesign\}\}([\s\S]*?)\{\{\/ifNot\}\}/g, (_, content) => ctx.scope.clientProvidesDesign ? "" : content);
 }
 
 export function renderSection(section: TemplateSection, ctx: TemplateContext, category = ""): TemplateSection {
@@ -57,13 +71,11 @@ export function renderSection(section: TemplateSection, ctx: TemplateContext, ca
   };
 }
 
-const DISCLAIMER = `\n\n---\n\n**Disclaimer:** This document was generated with AI assistance and is a starting point only. It does not constitute legal, financial, or professional advice. Review all content carefully before sending to clients. Pricing figures are illustrative estimates — adjust to match your actual rates. For legally binding contracts, consult a qualified attorney. ProposeKit is not a law firm and assumes no liability for the use of these templates.`;
-
 export function renderProposal(template: Template, ctx: TemplateContext): { title: string; body: string } {
   const filled = template.proposal.map((s) => renderSection(s, ctx, template.category));
   return {
-    title: `${ctx.projectType} Proposal — ${ctx.clientName}`,
-    body: filled.map((s) => `## ${s.heading}\n\n${s.body}`).join("\n\n") + DISCLAIMER,
+    title: `${projectTypeLabel(ctx.projectType)} Proposal — ${ctx.clientName}`,
+    body: filled.map((s) => `## ${s.heading}\n\n${s.body}`).join("\n\n"),
   };
 }
 
@@ -71,15 +83,50 @@ export function renderSOW(template: Template, ctx: TemplateContext): { title: st
   const filled = template.sow.map((s) => renderSection(s, ctx, template.category));
   return {
     title: `Scope of Work — ${ctx.clientName}`,
-    body: filled.map((s) => `## ${s.heading}\n\n${s.body}`).join("\n\n") + DISCLAIMER,
+    body: filled.map((s) => `## ${s.heading}\n\n${s.body}`).join("\n\n"),
   };
 }
 
+function parseFirstDollarAmount(s: string): number | undefined {
+  const m = s.match(/\$([\d,]+)\s*(?:[Kk])?/);
+  if (!m) return undefined;
+  let n = parseInt(m[1].replace(/,/g, ""), 10);
+  if (/[Kk]/.test(m[0])) n *= 1000;
+  return n;
+}
+
+function findRecommendedTier(
+  budget: string | undefined,
+  tiers: { name: string; price: string }[],
+): string | undefined {
+  const amount = budget ? parseFirstDollarAmount(budget) : undefined;
+  if (amount === undefined || tiers.length === 0) return undefined;
+
+  // Check which tier's price range contains the budget amount
+  for (const tier of tiers) {
+    const lo = parseFirstDollarAmount(tier.price);
+    const hiMatch = tier.price.match(/\$([\d,]+)[Kk]?\s*\+?$/);
+    const hi = hiMatch
+      ? parseInt(hiMatch[1].replace(/,/g, ""), 10) * (/[Kk]/.test(hiMatch[0]) ? 1000 : 1)
+      : lo;
+    if (lo !== undefined && amount >= lo && (hi === undefined || hi === lo || amount <= hi)) {
+      return tier.name;
+    }
+  }
+  return undefined;
+}
+
 export function renderQuote(template: Template, ctx: TemplateContext): { title: string; body: string } {
-  const tiers = template.quote.tiers.map((t) => `### ${t.name}\n${t.price}\n${t.description}\n${t.features.map((f) => `— ${f}`).join("\n")}`);
+  const budget = ctx.scope.optionalBudget || ctx.scope.pricingNotes;
+  const recommended = findRecommendedTier(budget, template.quote.tiers);
+
+  const tiers = template.quote.tiers.map((t) => {
+    const marker = t.name === recommended ? " ★ Recommended" : "";
+    return `### ${t.name}${marker}\n${t.price}\n${t.description}\n${t.features.map((f) => `— ${f}`).join("\n")}`;
+  });
   return {
     title: `Quote — ${ctx.clientName}`,
-    body: `${tiers.join("\n\n")}\n\n**Payment Schedule:** ${template.quote.paymentSchedule}${DISCLAIMER}`,
+    body: `${tiers.join("\n\n")}\n\n**Payment Schedule:** ${template.quote.paymentSchedule}`,
   };
 }
 

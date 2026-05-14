@@ -9,11 +9,9 @@ const templates: Record<string, Template> = {
     proposal: [
       {
         heading: "Project Understanding",
-        body: `Thank you for the opportunity to propose a solution for {{clientName}}.
+        body: `{{clientName}} is ready to elevate its digital presence. The brief calls for a design-driven approach — one where brand, usability, and conversion performance work together, not against each other.
 
-We understand you need {{deliverablesInline}}. The goal is a design-driven approach that elevates your brand, improves user experience, and delivers measurable results.
-
-Based on the project brief, we have outlined a scope, timeline, and investment structure below.`,
+This proposal covers the complete design lifecycle: from information architecture through final asset handoff, structured to give your development team everything they need to build without ambiguity.`,
       },
       {
         heading: "Proposed Solution",
@@ -73,7 +71,7 @@ A detailed schedule with specific dates will be provided at kickoff. Timeline de
 **Budget:** {{budget}}
 **Payment Notes:** {{pricingNotes}}
 
-A 50% deposit secures the project start date. Remaining balance is due upon final delivery.`,
+A 50% deposit secures the project start date. 25% at design approval milestone. 25% on final delivery.`,
       },
       {
         heading: "Optional Add-Ons",
@@ -96,8 +94,8 @@ A 50% deposit secures the project start date. Remaining balance is due upon fina
 Any work outside this scope will be handled as a separate change order.`,
       },
       {
-        heading: "Why Choose Me",
-        body: `I specialize in web design for small businesses and agencies. My process is direct, transparent, and focused on outcomes, not just files.
+        heading: "Why Choose Us",
+        body: `We specialize in web design for small businesses and agencies. Our process is direct, transparent, and focused on outcomes, not just files.
 
 — Design files delivered in industry-standard formats (Figma, SVG, PNG, PDF)
 — 2 revision rounds included on all mockups
@@ -194,7 +192,7 @@ If any assumption proves incorrect, scope, timeline, or cost may be revised by m
       },
       {
         heading: "Terms",
-        body: `**Payment:** 50% deposit upon signing, 50% upon final delivery. Invoices due within 15 days.
+        body: `**Payment:** 50% deposit to start, 25% at design approval milestone, 25% on final delivery. Invoices due within 15 days.
 
 **IP Ownership:** Full IP rights transfer to client upon final payment.
 
@@ -257,33 +255,31 @@ If any assumption proves incorrect, scope, timeline, or cost may be revised by m
     proposal: [
       {
         heading: "Project Understanding",
-        body: `Thank you for the opportunity to build a solution for {{clientName}}.
+        body: `{{clientName}} needs a unified digital platform — one that centralizes the customer experience, streamlines internal operations, and replaces the overhead of patching together multiple third-party tools.
 
-Based on your brief, we understand the core requirement: {{deliverablesInline}}.
-
-We've scoped a complete build — from architecture through deployment — designed to be fast, maintainable, and aligned with your goals.`,
+This proposal outlines a phased delivery: core platform first, then advanced capabilities, on a milestone-driven timeline matched to your team's priorities. The goal is not just feature parity with what exists today, but a foundation that scales with the business over the next 3–5 years.`,
       },
       {
         heading: "Proposed Solution",
-        body: `**Discovery & Planning**
-— Requirements gathering and technical specification
-— Information architecture and sitemap
-— Technology stack recommendation
+        body: `**Discovery & Architecture**
+— Stakeholder workshops to define scope, priorities, and success metrics
+— System architecture design, database schema, and API surface
+— Integration mapping for third-party services and data migration
 
-**Design & Prototyping**
-— Wireframes for all page templates
-— UI design for desktop, tablet, and mobile
-— Interactive prototype for stakeholder sign-off
+{{#ifNot clientProvidesDesign}}**Design & User Experience**
+— Wireframes for all key user journeys and edge cases
+— High-fidelity UI design across desktop, tablet, and mobile
+— Interactive prototype for stakeholder validation and user testing
 
-**Development**
-— Frontend: modern framework with responsive, accessible markup
-— Backend: secure API with database design
-— CMS: content management system tailored to your workflow
+{{/ifNot}}**Engineering**
+— Frontend and backend implementation aligned to the agreed architecture
+— Third-party integrations (payment, messaging, payroll, logistics)
+— Admin dashboard and internal tooling for day-to-day operations
 
-**Testing & Launch**
-— Cross-browser and device testing
-— Performance optimization (targeting 90+ Lighthouse)
-— Deployment and 30-day post-launch support`,
+**Quality & Launch**
+— Cross-browser, device, and accessibility testing
+— Performance optimization, security audit, and load testing
+— Staged deployment with post-launch monitoring and handoff`,
       },
       {
         heading: "Deliverables",
@@ -341,16 +337,18 @@ A 40% deposit secures the start date. 30% at development milestone. 30% before l
 {{assumptions}}
 
 **Exclusions:**
-{{exclusions}}`,
+{{exclusions}}
+
+Any feature or service not explicitly listed in this proposal is out of scope unless added via a written change order.`,
       },
       {
-        heading: "Why Choose Me",
-        body: `I build websites that are fast, maintainable, and built to grow with your business — not bloated with unnecessary complexity.
+        heading: "Why Choose Us",
+        body: `We build websites that are fast, maintainable, and built to grow with your business — not bloated with unnecessary complexity.
 
 — Clean, commented source code delivered via Git
 — CMS documentation written for real humans, not developers
 — 30 days of post-launch bug-fix support included
-— Direct communication — you talk to the builder, not a project manager`,
+— Direct communication — you talk to the builders, not a project manager`,
       },
       {
         heading: "Next Steps",
@@ -379,13 +377,13 @@ A 40% deposit secures the start date. 30% at development milestone. 30% before l
 — Sitemap and user flow mapping
 — Technology stack selection and environment setup
 
-**Phase 2 — Design (2–3 weeks)**
+{{#ifNot clientProvidesDesign}}**Phase 2 — Design (2–3 weeks)**
 — Wireframe creation for all page templates
 — UI design for desktop, tablet, mobile
 — Design system / component library
 — Interactive prototype
 
-**Phase 3 — Development (4–8 weeks)**
+{{/ifNot}}**Phase 3 — Development (4–8 weeks)**
 — Frontend development (HTML, CSS, JS, framework)
 — Backend API and database implementation
 — CMS integration and content modeling
@@ -416,7 +414,9 @@ Additionally:
 — SEO keyword research, content strategy, or paid advertising
 — Training beyond one initial session (additional sessions available as change order)
 — Performance guarantees for browsers more than 2 major versions behind current
-— Third-party system modifications (CRM, ERP, payment platforms)`,
+— Third-party system modifications (CRM, ERP, payment platforms)
+
+Any deliverable or service not explicitly listed in scope is excluded unless agreed in writing.`,
       },
       {
         heading: "Deliverables & Acceptance",
@@ -465,6 +465,24 @@ If any assumption is invalidated, scope, timeline, or cost may require revision.
 
 **Cancellation:** 14 days written notice. Work completed to date is invoiced. Deposit is non-refundable.`,
       },
+      {
+        heading: "Data Privacy & Compliance",
+        body: `**Data Handling:**
+— All data is transmitted and stored using industry-standard encryption (TLS 1.3, AES-256 at rest)
+— Database access is restricted to authorized personnel via VPN or IP whitelist
+— Automated daily backups with 30-day retention and verified restore procedure
+
+**Regulatory Compliance:**
+— GDPR: data subject access, rectification, and deletion requests are supported
+— CCPA: opt-out mechanisms and data inventory are maintained
+— Sensitive personal data (member profiles, payment history, health-related information if applicable) is handled with elevated access controls and audit logging
+— PCI-DSS: payment processing is handled exclusively through Stripe; no card data touches our servers
+
+**Client Responsibilities:**
+— Client is responsible for obtaining end-user consent where required (cookie consent, marketing opt-ins)
+— Client must notify us of any specific compliance requirements before development begins (HIPAA, SOC 2, etc.)
+— Post-launch, client is responsible for maintaining privacy policy and terms of service on the live site`,
+      },
     ],
     quote: {
       tiers: [
@@ -497,14 +515,14 @@ If any assumption is invalidated, scope, timeline, or cost may require revision.
         {
           name: "Authority",
           price: "$35,000 – $75,000+",
-          description: "Complex platform, SaaS MVP, or custom web application with advanced features.",
+          description: "Complex platform, multi-location system, or custom application with advanced integrations, analytics, and compliance requirements.",
           features: [
             "Unlimited pages / views",
-            "Full-stack architecture with modern frameworks",
-            "Advanced auth (SSO, social login, 2FA)",
-            "Admin dashboard with analytics",
+            "Full-stack architecture with custom integrations",
+            "Multi-location or multi-tenant architecture",
+            "Admin dashboards with role-based analytics",
             "CI/CD pipeline + staging environment",
-            "Load testing and scalability planning",
+            "Load testing, security audit, and scalability planning",
             "90-day post-launch support + documentation",
           ],
         },
@@ -607,8 +625,8 @@ Landing pages move fast. Typical turnaround: 1–2 weeks from kickoff to launch,
 {{exclusions}}`,
       },
       {
-        heading: "Why Choose Me",
-        body: `I build landing pages that convert — not just look good. Every design decision is backed by conversion principles: clear hierarchy, strong CTAs, social proof at the right moment. A focused page converts 2–5x better than sending traffic to a homepage. I build for one outcome: more leads and sales for your business.`,
+        heading: "Why Choose Us",
+        body: `We build landing pages that convert — not just look good. Every design decision is backed by conversion principles: clear hierarchy, strong CTAs, social proof at the right moment. A focused page converts 2–5x better than sending traffic to a homepage. We build for one outcome: more leads and sales for your business.`,
       },
       {
         heading: "Next Steps",
@@ -834,8 +852,8 @@ Branding projects typically run 4–8 weeks depending on feedback cycles and sco
 {{exclusions}}`,
       },
       {
-        heading: "Why Choose Me",
-        body: `I don't just design logos — I build brand systems that work across every surface. My process is collaborative: you get multiple directions, honest feedback, and a final system you can actually use without a designer on staff.
+        heading: "Why Choose Us",
+        body: `We don't just design logos — we build brand systems that work across every surface. My process is collaborative: you get multiple directions, honest feedback, and a final system you can actually use without a designer on staff.
 
 — All logo files in every format you'll ever need (AI, EPS, SVG, PNG, JPG)
 — Color palette with print and digital values (HEX, RGB, CMYK, Pantone)
@@ -890,8 +908,7 @@ Additionally:
 — Trademark registration or legal clearance (we recommend a trademark attorney)
 — Naming or tagline development (available as add-on)
 — Website design or development
-— Packaging design or production
-— Environmental or signage design
+{{packagingExclusion}}— Environmental or signage design
 — Ongoing brand management or retainer services
 — Photography, illustration, or custom icon sets beyond the core brand system
 — Print production or vendor coordination`,
@@ -1080,12 +1097,12 @@ Invoiced on the 1st of each month. Net 15.`,
 New projects (full redesigns, new feature builds, new websites) are scoped and quoted separately.`,
       },
       {
-        heading: "Why Choose Me",
+        heading: "Why Choose Us",
         body: `— **Predictable budget** — no surprise invoices for urgent fixes
 — **Faster turnaround** — retainer clients get priority, typically same or next business day
-— **Proactive, not reactive** — I catch issues before they become problems
-— **Relationship, not transaction** — I learn your business, your stack, your preferences
-— **Direct access** — you message me, I fix it. No ticket systems, no runaround`,
+— **Proactive, not reactive** — we catch issues before they become problems
+— **Relationship, not transaction** — we learn your business, your stack, your preferences
+— **Direct access** — you message us, we fix it. No ticket systems, no runaround`,
       },
       {
         heading: "Next Steps",

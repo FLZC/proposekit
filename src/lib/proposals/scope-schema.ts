@@ -12,6 +12,7 @@ const scopeSchema = z.object({
   optionalBudget: z.string().optional(),
   optionalTargetTimeline: z.string().optional(),
   extractionNotes: z.string().optional(),
+  clientProvidesDesign: z.boolean().optional(),
 });
 
 function normalizeStringList(items: unknown) {
@@ -69,5 +70,6 @@ export function normalizeStructuredScope(input: Partial<StructuredScope>): Struc
     optionalBudget: normalizeBudget(input.optionalBudget) ? normalizeBudget(input.optionalBudget) : undefined,
     optionalTargetTimeline: normalizeOptionalString(input.optionalTargetTimeline),
     extractionNotes: normalizeOptionalString(input.extractionNotes),
+    clientProvidesDesign: typeof input.clientProvidesDesign === "boolean" ? input.clientProvidesDesign : undefined,
   });
 }

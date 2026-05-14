@@ -11,4 +11,6 @@ export type StructuredScope = {
   optionalBudget?: string;
   optionalTargetTimeline?: string;
   extractionNotes?: string;
+  /** Client already has UI designs — project is build/development only */
+  clientProvidesDesign?: boolean;
 };
