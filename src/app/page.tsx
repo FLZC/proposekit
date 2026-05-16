@@ -1,5 +1,15 @@
 import Image from "next/image";
 import { LoadingLink } from "@/components/loading-link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AI Copilot for Agency Proposals — From Brief to Proposal in Minutes",
+  description:
+    "Paste a client brief and let AI extract a structured scope, then generate polished proposals, SOWs, and quotes. Built for 2-10 person web and design agencies.",
+  other: {
+    "msvalidate.01": "BD2990505EBFF5706C934F8616129E5C",
+  },
+};
 
 export default function HomePage() {
   return (
@@ -78,6 +88,7 @@ export default function HomePage() {
           )}
         </div>
       </section>
+
     </main>
   );
 }

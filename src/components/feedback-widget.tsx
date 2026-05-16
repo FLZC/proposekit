@@ -44,6 +44,35 @@ export function FeedbackWidget() {
 
   return (
     <>
+      {/* Nudge — editorial footnote style, amber ember as bridge to button */}
+      <div
+        className="fixed bottom-[8.5rem] right-6 z-40 pointer-events-none select-none"
+        style={{ animation: "nudgeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both" }}
+      >
+        <style>{`
+          @keyframes nudgeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes emberPulse {
+            0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(251,191,36,0); }
+            50%      { transform: scale(1.8); box-shadow: 0 0 6px 2px rgba(251,191,36,0.35); }
+          }
+        `}</style>
+        <div className="rounded-lg border border-amber-200/50 bg-[#FBF7F2]/90 backdrop-blur-sm px-3.5 py-2 shadow-[0_1px_8px_rgba(120,80,40,0.06)]">
+          <div className="flex items-center gap-2">
+            {/* Amber ember — pulses with scale + glow */}
+            <span
+              className="inline-block size-1.5 rounded-full bg-amber-400"
+              style={{ animation: "emberPulse 2.4s ease-in-out 1.2s infinite" }}
+            />
+            <p className="text-[11px] font-medium text-slate-400 tracking-[0.02em] leading-relaxed">
+              Found a bug or have feedback?
+            </p>
+          </div>
+        </div>
+      </div>
+
       <button
         type="button"
         onClick={() => setOpen(true)}

@@ -8,8 +8,12 @@ import { LoadingProvider } from "@/components/loading-bar";
 import { ViewSwitcher } from "@/components/view-switcher";
 
 export const metadata: Metadata = {
-  title: "ProposeKit",
-  description: "Turn messy client briefs into polished proposals, SOWs, and quotes.",
+  title: {
+    default: "ProposeKit | AI-Powered Proposal Generator for Agencies",
+    template: "%s | ProposeKit",
+  },
+  description:
+    "Turn messy client briefs into polished proposals, SOWs, and quotes in minutes. Built for web design and development agencies.",
   icons: { icon: "/favicon.png" },
 };
 
