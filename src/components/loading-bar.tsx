@@ -27,10 +27,13 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
     if (phaseRef.current === "active") {
+      clearTimeout(timer.current);
       clearInterval(trickle.current);
       setProgress(100);
-      setPhase("exiting");
-      timer.current = setTimeout(() => { setPhase("idle"); setProgress(0); }, 500);
+      timer.current = setTimeout(() => {
+        setPhase("idle");
+        timer.current = setTimeout(() => setProgress(0), 400);
+      }, 400);
     }
   }, [pathname]);
 
@@ -54,9 +57,10 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
 
   const done = useCallback(() => {
     clearInterval(trickle.current);
+    clearTimeout(timer.current);
     setProgress(100);
-    setPhase("exiting");
-    timer.current = setTimeout(() => { setPhase("idle"); setProgress(0); }, 500);
+    setPhase("idle");
+    timer.current = setTimeout(() => setProgress(0), 400);
   }, []);
 
   return (

@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "How ProposeKit handles your data — plain English, no legal jargon.",
+};
+
 export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-6 py-16">

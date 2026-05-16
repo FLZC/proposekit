@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "ProposeKit terms of service — the rules of the road for using our platform.",
+};
+
 export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-6 py-16">
